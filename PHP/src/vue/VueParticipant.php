@@ -16,7 +16,7 @@ class VueParticipant
 
     private function htmlAcceuil() : string
     {
-        $content = "Bonjour acceuil blabla";
+        $content = "Bonjour acceuil";
         return $content;
     }
 
@@ -84,6 +84,8 @@ class VueParticipant
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
+        $url_liste = $this->container->router->pathFor('affUneListe', ['noListe'=>1]);
+        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1]);
         $url_affichageForm = $this->container->router->pathFor('affForm');
 
         $html = <<<END
@@ -92,9 +94,11 @@ class VueParticipant
     <body>
     <h1>My WishList</h1>
     <nav>
-    <div><a href=$url_affichageForm>affForm</a></div>
     <div><a href=$url_acceuil>Acceuil</a></div>
+    <div><a href=$url_affichageForm>affForm</a></div>
     <div><a href=$url_listes>Listes</a></div>
+    <div><a href=$url_liste>Liste</a></div>
+    <div><a href=$url_item>Item</a></div>
     </nav>
         <br>
         <div class="content">

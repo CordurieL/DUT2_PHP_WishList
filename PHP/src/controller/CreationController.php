@@ -7,16 +7,18 @@ use mywishlist\vue\VueCreation as VueCreation;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-class CreationController {
-private \Slim\Container $container;
+class CreationController
+{
+    private \Slim\Container $container;
 
-public function __construct(\Slim\Container $container) {
-		$this->container = $container;
+    public function __construct(\Slim\Container $container)
+    {
+        $this->container = $container;
     }
 
     public function afficherFormulaire(Request $rq, Response $rs, $args):Response
     {
-        $vue = new VueCreation([],$this->container) ;
+        $vue = new VueCreation([], $this->container) ;
         $html = $vue->render(1) ;
         $rs->getBody()->write($html);
         return $rs;
@@ -32,7 +34,6 @@ public function __construct(\Slim\Container $container) {
         $liste->titre = $titre;
         $liste->description = $description;
         $liste->expiration = $expiration;
-        //$liste->token = 'AZERTY12345';
         $liste->token = bin2hex(random_bytes(4));
         $liste->token_edition = bin2hex(random_bytes(4));
         $liste->user_id = 0;

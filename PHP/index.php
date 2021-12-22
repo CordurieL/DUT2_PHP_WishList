@@ -29,7 +29,7 @@ $app->get(
 $app->get(
     '/test',
     function ($rq, $rs, $args) {
-        echo 'test zzzz';
+        echo 'test';
     }
 )->setName('test');
 
@@ -46,7 +46,7 @@ $app->get(
     '/partageliste/{token}',
     'mywishlist\controller\AffichageController:partageUneListe')->setName('partUneListe');
 
-$app->get('/new','mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
+$app->get('/newliste','mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
 //$app->get('/new','mywishlist\controller\AffichageController:afficherListes')->setName('affForm');
 
 /*
@@ -59,7 +59,7 @@ $app->get(
 )->setName('affForm');
 */
 
-$app->post('/new','mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
+$app->post('/newliste','mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
 
 $app->get(
