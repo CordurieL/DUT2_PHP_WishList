@@ -1,3 +1,4 @@
-public/vendor
-public/composer.lock
-.idea
+PHP/vendor
+PHP/composer.lock
+PHP/.idea
+PHP/src/conf/conf.ini
