@@ -47,7 +47,7 @@ class AffichageController
 
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
-        $liste = \mywishlist\models\Liste::find($args['noListe']) ;
+        $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
         $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray()], $this->container) ;
         $html = $vue->render(2) ;
         $rs->getBody()->write($html);

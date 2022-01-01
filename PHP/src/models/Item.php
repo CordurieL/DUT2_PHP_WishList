@@ -11,6 +11,6 @@ class Item extends \Illuminate\Database\Eloquent\Model
 
     public function liste()
     {
-        return $this->belongsTo('mywishlist\models\Liste', 'liste_id') ;
+        return $this->belongsTo('mywishlist\models\Liste', 'token') ;
     }
 }

@@ -26,7 +26,7 @@ class VueParticipant
         //var_dump($this->tab);
         $content = "\n";
         foreach ($this->tab as $l) {
-            $url = $this->container->router->pathFor('affUneListe', ['noListe'=>$l['no']]);
+            $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
             $content .= "<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token]</article>\n";
         }
         return "<section>$content</section>";
@@ -41,12 +41,13 @@ class VueParticipant
         return "<section>$content</section>";*/
 
         $l = $this->tab[0];
-        $content ="<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token]</article>\n";
+        $content ="<article>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id] <br><h1>$l[titre]</h1> <br>$l[description] <br>Expire le $l[expiration]</article>\n";
         $item = $this->tab[1];
+        $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
         foreach ($item as $i) {
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id']]);
-            $content .= "<li>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[img] ; $i[url] ; $i[tarif]\n";
+            $content .= "<div><li><a href='$url'>$i[nom]</a> : etat de la réservation à ajouter, peut etre en base de données<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
         return "<section>$content</section>";
     }
@@ -54,8 +55,8 @@ class VueParticipant
     private function htmlUnItem() : string
     {
         $i = $this->tab[0];
-        $url = $this->container->router->pathFor('acceuil');
-        $content = "$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[img] ; $i[url] ; $i[tarif]\n";
+        //$url = $this->container->router->pathFor('acceuil');
+        $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         return "<section>$content</section>";
     }
 
@@ -84,7 +85,7 @@ class VueParticipant
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
-        $url_liste = $this->container->router->pathFor('affUneListe', ['noListe'=>1]);
+        $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1]);
         $url_affichageForm = $this->container->router->pathFor('affForm');
 

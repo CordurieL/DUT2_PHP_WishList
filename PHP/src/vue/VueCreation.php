@@ -16,9 +16,9 @@ class VueCreation
     public function CreationformulaireListe(): string
     {
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='titre' placeholder='titre'/>
-	        <input type='text' name ='description' placeholder='descri'/>
-	        <input type='date' name ='expiration' placeholder='expiration'/>
+	        <input type='text' name ='titre' placeholder='titre'/><br>
+	        <input type='text' name ='description' placeholder='descri'/><br>
+	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration'/></div><br>
 	        <button type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
@@ -52,7 +52,7 @@ class VueCreation
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
-        $url_liste = $this->container->router->pathFor('affUneListe', ['noListe'=>1]);
+        $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1]);
         $url_affichageForm = $this->container->router->pathFor('affForm');
 

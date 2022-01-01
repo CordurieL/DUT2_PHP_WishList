@@ -39,14 +39,16 @@ $app->get(
 )->setName('listeDesListes');
 
 $app->get(
-    '/liste/{noListe}',
-    'mywishlist\controller\AffichageController:afficherUneListe')->setName('affUneListe');
+    '/liste/{token}',
+    'mywishlist\controller\AffichageController:afficherUneListe'
+)->setName('affUneListe');
 
 $app->get(
     '/partageliste/{token}',
-    'mywishlist\controller\AffichageController:partageUneListe')->setName('partUneListe');
+    'mywishlist\controller\AffichageController:partageUneListe'
+)->setName('partUneListe');
 
-$app->get('/newliste','mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
+$app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
 //$app->get('/new','mywishlist\controller\AffichageController:afficherListes')->setName('affForm');
 
 /*
@@ -59,7 +61,7 @@ $app->get(
 )->setName('affForm');
 */
 
-$app->post('/newliste','mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
+$app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
 
 $app->get(
