@@ -57,8 +57,15 @@ class AffichageController
     public function afficherUnItem(Request $rq, Response $rs, $args):Response
     {
         $item = \mywishlist\models\Item::find($args['id']) ;
-        $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
-        $html = $vue->render(3) ;
+        $liste = $item->liste;
+        $tokenListe = $liste->token;
+        if ($tokenListe === $args['token']) {
+            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+            $html = $vue->render(3) ;
+        } else {
+            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+            $html = $vue->render(0) ; // retourne à l'accueil
+        }
 
         $rs->getBody()->write($html);
         return $rs;

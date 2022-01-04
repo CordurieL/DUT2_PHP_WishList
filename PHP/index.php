@@ -65,7 +65,7 @@ $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormLis
 
 
 $app->get(
-    '/item/{id}',
+    '/liste/{token}/item/{id}',
     function ($rq, $rs, $args) {
         $c = new \mywishlist\controller\AffichageController($this);
         return $c->afficherUnItem($rq, $rs, $args);

@@ -48,12 +48,10 @@ class VueCreation
             }
         }
 
-
-
         $url_acceuil = $this->container->router->pathFor('acceuil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
-        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1]);
+        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
 
         $html = <<<END
