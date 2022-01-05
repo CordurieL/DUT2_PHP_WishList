@@ -42,7 +42,7 @@ class VueParticipant
             $content .= "<div><li><a href='$url'>$i[nom]</a> : etat de la réservation à ajouter, peut etre en base de données<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
         /* Pour les messages dans les listes */
-        $content .= "<hr style='border-top: 10px solid black;'>";
+        $content .= "</ul><hr style='border-top: 10px solid black;'>";
         $content .= "<form method='POST' action=''>
 	        <textarea name ='contenu' placeholder='Message' maxlength=255 cols=50 rows=8></textarea><br>
 	        <button type='submit'>Publier le message</button>
