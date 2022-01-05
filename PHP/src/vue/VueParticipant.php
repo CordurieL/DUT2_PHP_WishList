@@ -22,8 +22,6 @@ class VueParticipant
 
     private function htmlListes() : string
     {
-        //echo '<pre>';
-        //var_dump($this->tab);
         $content = "\n";
         foreach ($this->tab as $l) {
             $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
@@ -34,12 +32,6 @@ class VueParticipant
 
     private function htmlUneListe() : string
     {
-        /*$content = "\n";
-        foreach ($this->tab as $l) {
-            $content .= "<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token]</article>\n";
-        }
-        return "<section>$content</section>";*/
-
         $l = $this->tab[0];
         $content ="<article>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id] <br><h1>$l[titre]</h1> <br>$l[description] <br>Expire le $l[expiration]</article>\n";
         $item = $this->tab[1];
@@ -49,13 +41,22 @@ class VueParticipant
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : etat de la réservation à ajouter, peut etre en base de données<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
+        /* Pour les messages dans les listes */
+        $content .= "<hr style='border-top: 10px solid black;'>";
+        $content .= "<form method='POST' action=''>
+	        <textarea name ='contenu' placeholder='Message' maxlength=255 cols=50 rows=8></textarea><br>
+	        <button type='submit'>Publier le message</button>
+            </form><br>";
+        $message = $this->tab[2];
+        foreach ($message as $m) {
+            $content .= "<div>$m[contenu]</div><br>";
+        }
         return "<section>$content</section>";
     }
     
     private function htmlUnItem() : string
     {
         $i = $this->tab[0];
-        //$url = $this->container->router->pathFor('acceuil');
         $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
         return "<section>$content</section>";
     }

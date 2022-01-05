@@ -48,7 +48,19 @@ class AffichageController
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
         $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
-        $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray()], $this->container) ;
+        /* Pour les messages dans les listes */
+        $data = $rq->getParsedBody();
+        if (isset($data['contenu'])) {
+            $contenuMessage = filter_var($data['contenu'], FILTER_SANITIZE_STRING);
+            $messageLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuMessage)));
+            if ($contenuMessage != "" && $contenuMessage != null && $messageLength >0) {
+                $message = new \mywishlist\models\Message();
+                $message->contenu = $contenuMessage;
+                $message->liste_id = $liste->no;
+                $message->save();
+            }
+        }
+        $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray(),$liste->messages->toArray()], $this->container) ;
         $html = $vue->render(2) ;
         $rs->getBody()->write($html);
         return $rs;

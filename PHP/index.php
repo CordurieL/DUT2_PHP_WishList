@@ -43,23 +43,15 @@ $app->get(
     'mywishlist\controller\AffichageController:afficherUneListe'
 )->setName('affUneListe');
 
+/* Pour les messages dans les listes */
+$app->post('/liste/{token}', 'mywishlist\controller\AffichageController:afficherUneListe')->setName('traitFormMessListe');
+
 $app->get(
     '/partageliste/{token}',
     'mywishlist\controller\AffichageController:partageUneListe'
 )->setName('partUneListe');
 
 $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
-//$app->get('/new','mywishlist\controller\AffichageController:afficherListes')->setName('affForm');
-
-/*
-$app->get(
-    '/new',
-    function ($rq, $rs, $args) {
-        $c = new \mywishlist\controller\CreationController($this);
-        return $c->afficherFormulaire($rq, $rs, $args);
-    }
-)->setName('affForm');
-*/
 
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
