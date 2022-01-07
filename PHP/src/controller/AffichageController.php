@@ -77,11 +77,24 @@ class AffichageController
 
 
     public function afficherChoisirItem(Request $rq, Response $rs, $args):Response
-        {
-            $item = \mywishlist\models\Item::find($args['id']) ;
-            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
-            $html = $vue->render(4) ;
-            $rs->getBody()->write($html);
-            return $rs;
-        }
+    {
+        $item = \mywishlist\models\Item::find($args['id']) ;
+        $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+        $html = $vue->render(4) ;
+        $rs->getBody()->write($html);
+        return $rs;
+    }
+
+    public function traiterFormItem(Request $rq, Response $rs, $args):Response
+    {
+        $data = $rq->getParsedBody();
+        $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
+        $idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
+        $item = \mywishlist\models\Item::find($idItem);
+        $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+        //$vue = new VueCreation([$item->toArray()], $this->container);
+        $html = $vue->render(5);
+        $rs->getBody()->write($html);
+        return $rs;
+    }
 }

@@ -69,6 +69,7 @@ $app->get(
 )->setName('affUnItem');
 
 $app->get('/choixItem', 'mywishlist\controller\AffichageController:afficherChoisirItem')->setName('choisirItem');
+$app->post('/choixItem', 'mywishlist\controller\AffichageController:traiterFormItem')->setName('traitFormItem');
 
 
 $app->run();

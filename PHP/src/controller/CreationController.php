@@ -55,7 +55,6 @@ class CreationController
 
     public function traiterReservationItem(Request $rq, Response $rs, $args):Response
     {
-
         $data = $rq->getParsedBody();
         $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
         $idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);

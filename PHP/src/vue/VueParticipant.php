@@ -64,7 +64,8 @@ class VueParticipant
     private function htmlChoisirItem():string
     {
     $content = "<Form method='POST' action=''>
-    <div>Entrez le numéro de l'item</div> ; <input type='text' placeholder='idItem'/><br> ;
+    <div>Entrez le numéro de l'item</div>
+    <input type='text' placeholder='idItem'/><br>
     <button type='submit'>Sélectionner</button>
     </form><br>";
     return "<section>$content</section>";
