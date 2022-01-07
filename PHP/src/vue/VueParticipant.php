@@ -61,6 +61,7 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
+
     public function render($selecteur)
     {
         switch ($selecteur) {
@@ -79,16 +80,15 @@ class VueParticipant
          case 3: {
          $content = $this->htmlUnItem();
          break;
+         }
         }
-        }
-
-
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
+        $url_reserverItem = $this->container->router->pathFor('affReservation');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -101,6 +101,7 @@ class VueParticipant
     <div><a href=$url_listes>Listes</a></div>
     <div><a href=$url_liste>Liste</a></div>
     <div><a href=$url_item>Item</a></div>
+    <div><a href=$url_reserverItem>Réserver un Item</a></div>
     </nav>
         <br>
         <div class="content">

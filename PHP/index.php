@@ -48,12 +48,16 @@ $app->post('/liste/{token}', 'mywishlist\controller\AffichageController:afficher
 
 $app->get(
     '/partageliste/{token}',
-    'mywishlist\controller\AffichageController:partageUneListe'
+    'mywishlist\controller\CreationController:partageUneListe'
 )->setName('partUneListe');
 
 $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
 
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
+
+$app->get('/reserveItem', 'mywishlist\controller\CreationController:afficherReservationItem')->setName('affReservation');
+
+$app->post('/reserveItem', 'mywishlist\controller\CreationController:traiterReservationItem')->setName('traitReservation');
 
 
 $app->get(
@@ -63,5 +67,6 @@ $app->get(
         return $c->afficherUnItem($rq, $rs, $args);
     }
 )->setName('affUnItem');
+
 
 $app->run();
