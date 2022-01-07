@@ -55,6 +55,10 @@ $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormula
 
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
+$app->get('/reserveItem', 'mywishlist\controller\CreationController:afficherReservationItem')->setName('affReservation');
+
+$app->post('/reserveItem', 'mywishlist\controller\CreationController:traiterReservationItem')->setName('traitReservation');
+
 
 $app->get(
     '/liste/{token}/item/{id}',

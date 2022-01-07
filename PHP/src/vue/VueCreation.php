@@ -28,9 +28,38 @@ class VueCreation
     public function listeCree():string
     {
         $l = $this->tab[0];
-        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token] ; $l[token_edition]</article>\n";
+        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token] ; $l[token_edition]</article>";
+        echo "\n";
         return $content;
     }
+
+    public function CreationReservationItem(): string
+    {
+        $content = "<form method='POST' action=''>
+            <input type='text' name ='nom' placeholder='nom'/><br>
+	        <input type='number' name ='idItem' placeholder='numéro de l item'/><br>
+	         <button type='submit'>Réserver l'item</button><br>
+	        </form>";
+            return $content;
+    }
+
+    public function itemReserve():string
+    {
+        $i = $this->tab[0];
+        $content = "<article>L'item numéro $i[id] de nom $i[nom] et de prix $i[tarif] a bien été réservé</article>";
+        echo "\n";
+        return $content;
+    }
+
+    public function itemDejaReserve():string
+    {
+        $i = $this->tab[0];
+        $content = "<article>Réservation Impossible ! <br>
+        L'item numéro $i[id] de nom $i[nom] et de prix $i[tarif] a déjà été réservé sous le nom de $i[nomReservation] !</article>";
+        echo "\n";
+        return $content;
+    }
+
 
 
     public function render($selecteur)
@@ -46,6 +75,22 @@ class VueCreation
                $content = $this->listeCree();
                 break;
             }
+
+            case 3:
+            {
+                $content = $this->CreationReservationItem();
+                break;
+            }
+            case 4:
+            {
+                $content = $this->itemReserve();
+                break;
+            }
+            case 5:
+            {
+                $content = $this->itemDejaReserve();
+                break;
+            }
         }
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
@@ -53,6 +98,7 @@ class VueCreation
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
+        $url_reserverItem = $this->container->router->pathFor('affReservation');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -65,6 +111,7 @@ class VueCreation
     <div><a href=$url_listes>Listes</a></div>
     <div><a href=$url_liste>Liste</a></div>
     <div><a href=$url_item>Item</a></div>
+    <div><a href=$url_reserverItem>Réserver un Item</a></div>
     </nav>
         <br>
         <div class="content">
