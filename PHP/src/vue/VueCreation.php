@@ -86,7 +86,7 @@ class VueCreation
     <div><a href=$url_liste>Liste</a></div>
     <div><a href=$url_item>Item</a></div>
     <div><a href=$url_reserverItem>Réserver un Item</a></div>
-    <div><a href=$url_url_creerItem>Créer un Item</a></div>
+    <div><a href=$url_creerItem>Créer un Item</a></div>
     </nav>
         <br>
         <div class="content">
