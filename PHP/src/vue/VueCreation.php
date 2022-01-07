@@ -36,10 +36,10 @@ class VueCreation
     {
         $content = "<form method='POST' action=''>
         <input type='text' name='nom' placeholder='nom'/><br>
-        <input type='text' name='description' placeholder='descri'/><br>
-        <input type='number' name='tarif' placeholder='tarif'/><br>
-        <input type='number' name='idListe' placeholder='liste id'/><br>
-        <button type='submit'>Créer l'item'</button>
+        <input type='text' name='description' placeholder='description'/><br>
+        <input type='number' name='tarif' placeholder='tarif' step='0.01' /><br>
+        <input type='number' name='idListe' placeholder='idListe'/><br>
+        <button type='submit'>Créer l'item</button>
         </form>";
         echo "\n";
         return $content;
