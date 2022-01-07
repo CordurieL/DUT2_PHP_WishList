@@ -59,9 +59,12 @@ class AffichageController
                 $message->liste_id = $liste->no;
                 $message->save();
             }
+            //redirect
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+        } else {
+            $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray(),$liste->messages->toArray()], $this->container) ;
+            $html = $vue->render(2) ;
         }
-        $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray(),$liste->messages->toArray()], $this->container) ;
-        $html = $vue->render(2) ;
         $rs->getBody()->write($html);
         return $rs;
     }
