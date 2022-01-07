@@ -61,6 +61,16 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
+    private function htmlChoisirItem():string
+    {
+    $content = "<Form method='POST' action=''>
+    <div>Entrez le numéro de l'item</div> ; <input type='text' placeholder='idItem'/><br> ;
+    <button type='submit'>Sélectionner</button>
+    </form><br>";
+    return "<section>$content</section>";
+    }
+
+
     public function render($selecteur)
     {
         switch ($selecteur) {
@@ -79,7 +89,11 @@ class VueParticipant
          case 3: {
          $content = $this->htmlUnItem();
          break;
-            }
+         }
+         case 4: {
+         $content = $this->htmlChoisirItem();
+         break;
+         }
         }
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
@@ -88,6 +102,7 @@ class VueParticipant
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_reserverItem = $this->container->router->pathFor('affReservation');
+        $url_ChoixItem = $this->container->router->pathFor('choisirItem');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -101,6 +116,7 @@ class VueParticipant
     <div><a href=$url_liste>Liste</a></div>
     <div><a href=$url_item>Item</a></div>
     <div><a href=$url_reserverItem>Réserver un Item</a></div>
+    <div><a href=$url_ChoixItem>Choisir un Item</a></div>
     </nav>
         <br>
         <div class="content">

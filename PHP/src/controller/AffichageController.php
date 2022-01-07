@@ -35,15 +35,7 @@ class AffichageController
         return $rs;
     }
 
-    public function partageUneListe(Request $rq, Response $rs, $args):Response
-    {
-        //$liste = \mywishlist\models\Liste::find($args['noListe']);
-        $liste = \mywishlist\models\Liste::where('token', '=', $args['token'])->first();
-        $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray()], $this->container) ;
-        $html = $vue->render(2) ;
-        $rs->getBody()->write($html);
-        return $rs;
-    }
+
 
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
@@ -82,4 +74,14 @@ class AffichageController
         $rs->getBody()->write($html);
         return $rs;
     }
+
+
+    public function afficherChoisirItem(Request $rq, Response $rs, $args):Response
+        {
+            $item = \mywishlist\models\Item::find($args['id']) ;
+            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+            $html = $vue->render(4) ;
+            $rs->getBody()->write($html);
+            return $rs;
+        }
 }

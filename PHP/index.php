@@ -48,7 +48,7 @@ $app->post('/liste/{token}', 'mywishlist\controller\AffichageController:afficher
 
 $app->get(
     '/partageliste/{token}',
-    'mywishlist\controller\AffichageController:partageUneListe'
+    'mywishlist\controller\CreationController:partageUneListe'
 )->setName('partUneListe');
 
 $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormulaire')->setName('affForm');
@@ -67,5 +67,8 @@ $app->get(
         return $c->afficherUnItem($rq, $rs, $args);
     }
 )->setName('affUnItem');
+
+$app->get('/choixItem', 'mywishlist\controller\AffichageController:afficherChoisirItem')->setName('choisirItem');
+
 
 $app->run();
