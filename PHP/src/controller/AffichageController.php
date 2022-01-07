@@ -35,8 +35,6 @@ class AffichageController
         return $rs;
     }
 
-
-
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
         $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
@@ -77,6 +75,4 @@ class AffichageController
         $rs->getBody()->write($html);
         return $rs;
     }
-
-
 }

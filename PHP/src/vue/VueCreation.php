@@ -28,7 +28,14 @@ class VueCreation
     public function listeCree():string
     {
         $l = $this->tab[0];
-        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token] ; $l[token_edition]</article>\n";
+        $tokenEdition = "$l[token_edition]";
+        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token] ; $tokenEdition</article>\n";
+        setcookie(
+            "TokenEdition:".$tokenEdition,
+            $tokenEdition,
+            time() + (100 * 365 * 24 * 60 * 60) //expire dans 100 ans
+        ) ;
+        echo "votre token d'édition = $tokenEdition a été créé";
         return $content;
     }
 

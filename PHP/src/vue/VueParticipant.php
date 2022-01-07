@@ -39,7 +39,15 @@ class VueParticipant
         $content .= "<ul>";
         foreach ($item as $i) {
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
-            $content .= "<div><li><a href='$url'>$i[nom]</a> : etat de la réservation à ajouter, peut etre en base de données<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
+            $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
+            $tokenEdition = "$l[token_edition]";
+            /* Le token pour savoir si on est l'éditeur */
+            if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
+                $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item<br>";
+            } else {
+                $content .= "Etat de la réservation visible mais à ajouter en BDD<br>";
+            }
+            $content .= "<img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
         /* Pour les messages dans les listes */
         $content .= "</ul><hr style='border-top: 10px solid black;'>";
