@@ -45,6 +45,20 @@ class CreationController
         return $rs;
     }
 
+    public function afficherCreationItem(Request $rq, Response $rs, $args):Response
+    {
+        $vue = new VueCreation([], $this->container);
+        $html = $vue->render(3) ;
+        $rs->getBody()->write($html);
+        return $rs;
+    }
+
+    public function traiterFormItem(Request $rq, Response $rs, $args):Response
+        {
+
+            return $rs;
+        }
+
     public function afficherReservationItem(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);

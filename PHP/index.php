@@ -60,6 +60,11 @@ $app->get('/reserveItem', 'mywishlist\controller\CreationController:afficherRese
 $app->post('/reserveItem', 'mywishlist\controller\CreationController:traiterReservationItem')->setName('traitReservation');
 
 
+//creer un item
+$app->get('/newItem', 'mywishlist\controller\CreationController:afficherCreationItem')->setName('affFormItem');
+$app->post('/newItem', 'mywishlist\controller\CreationController:traiterFormItem')->setName('traitFormItem');
+
+
 $app->get(
     '/liste/{token}/item/{id}',
     function ($rq, $rs, $args) {
