@@ -39,6 +39,19 @@ class VueCreation
         return $content;
     }
 
+    public function CreationFormulaireItem():string
+    {
+        $content = "<form method='POST' action=''>
+        <input type='text' name='nom' placeholder='nom'/><br>
+        <input type='text' name='description' placeholder='description'/><br>
+        <input type='number' name='tarif' placeholder='tarif' step='0.01' min='0' /><br>
+        <input type='number' name='idListe' placeholder='idListe'/><br>
+        <button type='submit'>Créer l'item</button>
+        </form>";
+        echo "\n";
+        return $content;
+    }
+
 
     public function render($selecteur)
     {
@@ -53,6 +66,11 @@ class VueCreation
                $content = $this->listeCree();
                 break;
             }
+            case 3:
+            {
+                $content = $this->CreationFormulaireItem();
+                break;
+            }
         }
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
@@ -60,6 +78,8 @@ class VueCreation
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
+        $url_reserverItem = $this->container->router->pathFor('affReservation');
+        $url_creerItem = $this->container->router->pathFor('affFormItem');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -72,6 +92,8 @@ class VueCreation
     <div><a href=$url_listes>Listes</a></div>
     <div><a href=$url_liste>Liste</a></div>
     <div><a href=$url_item>Item</a></div>
+    <div><a href=$url_reserverItem>Réserver un Item</a></div>
+    <div><a href=$url_creerItem>Créer un Item</a></div>
     </nav>
         <br>
         <div class="content">
