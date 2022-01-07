@@ -37,7 +37,7 @@ class VueCreation
         $content = "<form method='POST' action=''>
         <input type='text' name='nom' placeholder='nom'/><br>
         <input type='text' name='description' placeholder='description'/><br>
-        <input type='number' name='tarif' placeholder='tarif' step='0.01' /><br>
+        <input type='number' name='tarif' placeholder='tarif' step='0.01' min='0' /><br>
         <input type='number' name='idListe' placeholder='idListe'/><br>
         <button type='submit'>Créer l'item</button>
         </form>";
