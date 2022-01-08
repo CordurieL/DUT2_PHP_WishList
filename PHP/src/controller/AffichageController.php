@@ -15,6 +15,19 @@ class AffichageController
         $this->container = $container;
     }
 
+    public static function verifierChamp(mixed $chaine) :string|null
+    {
+        $res = null;
+        if (is_string($chaine)) {
+            $contenuChamp = filter_var($chaine, FILTER_SANITIZE_STRING);
+            $contenuLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuChamp)));
+            if ($contenuChamp != "" && $contenuChamp != null && $contenuLength >0) {
+                $res = $contenuChamp;
+            }
+        }
+        return $res;
+    }
+
     public function afficherAcceuil(Request $rq, Response $rs, $args):Response
     {
         $listes = \mywishlist\models\Liste::all() ;
@@ -38,8 +51,23 @@ class AffichageController
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
         $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
-        /* Pour les messages dans les listes */
         $data = $rq->getParsedBody();
+        /* Pour les modifications d'informations generales de la liste */
+        if ((isset($data['editerTitre'])&&($this->verifierChamp($data['editerTitre']) != null))||((isset($data['editerDescr'])&&$this->verifierChamp($data['editerDescr']) !=null))||((isset($data['editerDateExp'])&&$this->verifierChamp($data['editerDateExp'])!=null))) {
+            if (($nouveauTitre = $this->verifierChamp($data['editerTitre'])) != null) {
+                $liste->titre = $nouveauTitre;
+            }
+            if (($nouvelleDescr = $this->verifierChamp($data['editerDescr'])) != null) {
+                $liste->description = $nouvelleDescr;
+            }
+            if (($nouvelleDateExp = $this->verifierChamp($data['editerDateExp'])) != null) {
+                $liste->expiration = $nouvelleDateExp;
+            }
+            $liste->save();
+            //redirect
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+        }
+        /* Pour les messages de liste */
         if (isset($data['contenu'])) {
             $contenuMessage = filter_var($data['contenu'], FILTER_SANITIZE_STRING);
             $messageLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuMessage)));

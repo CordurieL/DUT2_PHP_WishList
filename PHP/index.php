@@ -46,6 +46,9 @@ $app->get(
 /* Pour les messages dans les listes */
 $app->post('/liste/{token}', 'mywishlist\controller\AffichageController:afficherUneListe')->setName('traitFormMessListe');
 
+/* Pour modifier les informations des listes dont on a le token d'edition */
+//$app->post('/liste/{token}', 'mywishlist\controller\AffichageController:editerInfosListe')->setName('updateInfosListe');
+
 $app->get(
     '/partageliste/{token}',
     'mywishlist\controller\CreationController:partageUneListe'

@@ -33,14 +33,23 @@ class VueParticipant
     private function htmlUneListe() : string
     {
         $l = $this->tab[0];
-        $content ="<article>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id] <br><h1>$l[titre]</h1> <br>$l[description] <br>Expire le $l[expiration]</article>\n";
+        $tokenEdition = "$l[token_edition]";
+        $content = "";
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
+            $content .= "<form method='POST' action=''>
+	        <input type='text' name ='editerTitre' placeholder='titre'/>
+	        <input type='text' name ='editerDescr' placeholder='descri'/>
+	        <input type='date' name ='editerDateExp' placeholder='expiration'/>
+	        <button type='submit'>Modifier la liste</button>
+            </form>";
+        }
+        $content .="<article>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id] <br><h1>$l[titre]</h1> <br>$l[description] <br>Expire le $l[expiration]</article>\n";
         $item = $this->tab[1];
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
         foreach ($item as $i) {
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
-            $tokenEdition = "$l[token_edition]";
             /* Le token pour savoir si on est l'éditeur */
             if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
                 $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item<br>";
