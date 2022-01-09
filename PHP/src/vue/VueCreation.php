@@ -29,7 +29,8 @@ class VueCreation
     {
         $l = $this->tab[0];
         $tokenEdition = "$l[token_edition]";
-        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token] ; $tokenEdition</article>\n";
+        $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
+        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $dateDExp ; $l[token] ; $tokenEdition</article>\n";
         setcookie(
             "TokenEdition:".$tokenEdition,
             $tokenEdition,

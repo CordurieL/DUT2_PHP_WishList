@@ -24,8 +24,9 @@ class VueParticipant
     {
         $content = "\n";
         foreach ($this->tab as $l) {
+            $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
             $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
-            $content .= "<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $l[expiration] ; $l[token]</article>\n";
+            $content .= "<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $dateDExp ; $l[token]</article>\n";
         }
         return "<section>$content</section>";
     }
@@ -33,6 +34,7 @@ class VueParticipant
     private function htmlUneListe() : string
     {
         $l = $this->tab[0];
+        $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
         $content = "";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
@@ -60,7 +62,7 @@ class VueParticipant
             </form>
             <br>";
         }
-        $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $l[expiration]<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
+        $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $dateDExp<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
         $item = $this->tab[1];
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
@@ -68,12 +70,38 @@ class VueParticipant
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
             /* Le token pour savoir si on est l'éditeur */
-            if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
-                $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item<br>";
+            if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && (((new \DateTime('NOW'))->format('d-m-Y')) < $dateDExp)) {
+                $etatItem = "$i[nomReservation]";
+                if ($etatItem == null) {
+                    $etatItem = "Pas encore réservé";
+                } else {
+                    $etatItem = "Réservé";
+                }
+                $content .= "
+                <script type='text/javascript'>
+                function montrerReserv(obj)
+                {
+                    var reserv = document.getElementById('reservCachee');
+                    var boutonReserv = document.getElementById('reservCacheeBouton');
+                    if (reserv.style.display == 'none'){
+                        reserv.style.display = '';
+                        boutonReserv.value = 'Cacher';
+                    }else{
+                        reserv.style.display = 'none';
+                        boutonReserv.value = 'Voir';
+                    }
+                }
+                </script>
+                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item avant le $dateDExp<br>
+                <span>
+                Etat de la réservation : 
+                    <input id='reservCacheeBouton' type='button' value='Voir' onclick='montrerReserv(this);'>
+                        <span id='reservCachee' style='display: none;'>$etatItem</span>
+                </span>";
             } else {
                 $content .= "Etat de la réservation visible mais à ajouter en BDD<br>";
             }
-            $content .= "<img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
+            $content .= "<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
         /* Pour les messages dans les listes */
         $content .= "</ul><hr style='border-top: 10px solid black;'>";
