@@ -113,7 +113,8 @@ class AffichageController
             setcookie(
                 "nomReservation",
                 $nom,
-                time() + (100 * 365 * 24 * 60 * 60) //expire dans 100 ans
+                time() + (100 * 365 * 24 * 60 * 60), //expire dans 100 ans
+                "/"
             );
         } else {
             $vue = new VueParticipant([$item->toArray()], $this->container);
