@@ -88,13 +88,13 @@ class VueCreation
     <body>
     <h1>My WishList</h1>
     <nav>
-    <div><a href=$url_acceuil>Acceuil</a></div>
-    <div><a href=$url_affichageForm>affForm</a></div>
-    <div><a href=$url_listes>Listes</a></div>
-    <div><a href=$url_liste>Liste</a></div>
-    <div><a href=$url_item>Item</a></div>
-    <div><a href=$url_reserverItem>Réserver un Item</a></div>
-    <div><a href=$url_creerItem>Créer un Item</a></div>
+    <div><a href=$url_acceuil>Accueil</a></div>
+    <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
+    <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
+    <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
+    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
+    <div><a href=$url_reserverItem>Réserver un Item (démo, emplacement temporaire)</a></div>
+    <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
     </nav>
         <br>
         <div class="content">
