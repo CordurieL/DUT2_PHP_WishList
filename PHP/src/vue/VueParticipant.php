@@ -36,14 +36,31 @@ class VueParticipant
         $tokenEdition = "$l[token_edition]";
         $content = "";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
-            $content .= "<form method='POST' action=''>
-	        <input type='text' name ='editerTitre' placeholder='titre'/>
-	        <input type='text' name ='editerDescr' placeholder='descri'/>
-	        <input type='date' name ='editerDateExp' placeholder='expiration'/>
+            $content .= "
+            <script type='text/javascript'>
+                function copierLUrl() 
+                {
+                    ZoneUrl.innerHTML = window.location.href;
+                    var copyTextarea = document.getElementById('ZoneUrl');
+                    copyTextarea.select();
+                    document.execCommand('copy');
+                }
+            </script>
+            <div>
+                <input type='button' value='Copier le lien à cette page' onclick='copierLUrl();' />
+                <textarea id='ZoneUrl' rows='1' cols='65'></textarea>
+            </div>
+            <br>
+            <form method='POST' action=''>
+	        <input type='text' name ='editerTitre' placeholder='Titre'/>
+	        <input type='text' name ='editerDescr' placeholder='Description'/>
+	        ".//<input type='date' name ='editerDateExp' placeholder='expiration'/>
+            "<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
 	        <button type='submit'>Modifier la liste</button>
-            </form>";
+            </form>
+            <br>";
         }
-        $content .="<article>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id] <br><h1>$l[titre]</h1> <br>$l[description] <br>Expire le $l[expiration]</article>\n";
+        $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $l[expiration]<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
         $item = $this->tab[1];
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
