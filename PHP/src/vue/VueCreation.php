@@ -35,7 +35,8 @@ class VueCreation
             $tokenEdition,
             time() + (100 * 365 * 24 * 60 * 60) //expire dans 100 ans
         ) ;
-        echo "votre token d'édition = $tokenEdition a été créé";
+        $url_nouvListe = $this->container->router->pathFor('affUneListe', ['token'=>"$l[token]"]);
+        $content.= "<br>votre token d'édition = $tokenEdition a été créé<br><a href=$url_nouvListe>Vous rendre à votre nouvelle liste</a>";
         return $content;
     }
 
