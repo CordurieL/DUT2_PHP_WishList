@@ -34,8 +34,9 @@ class VueCreation
         setcookie(
             "TokenEdition:".$tokenEdition,
             $tokenEdition,
-            time() + (100 * 365 * 24 * 60 * 60) //expire dans 100 ans
-        ) ;
+            time() + (100 * 365 * 24 * 60 * 60),   //expire dans 100 ans
+            "/"
+        );
         $url_nouvListe = $this->container->router->pathFor('affUneListe', ['token'=>"$l[token]"]);
         $content.= "<br>votre token d'édition = $tokenEdition a été créé<br><a href=$url_nouvListe>Vous rendre à votre nouvelle liste</a>";
         return $content;
@@ -80,7 +81,6 @@ class VueCreation
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
-        $url_reserverItem = $this->container->router->pathFor('affReservation');
         $url_creerItem = $this->container->router->pathFor('affFormItem');
 
         $html = <<<END
@@ -94,7 +94,6 @@ class VueCreation
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_reserverItem>Réserver un Item (démo, emplacement temporaire)</a></div>
     <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
     </nav>
         <br>

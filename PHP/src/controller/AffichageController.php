@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace mywishlist\controller;
 
+use mywishlist\vue\VueCreation as VueCreation;
+use mywishlist\vue\VueParticipant;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -98,6 +100,24 @@ class AffichageController
         } else {
             $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
             $html = $vue->render(0) ; // retourne à l'accueil
+        }
+
+        $data = $rq->getParsedBody();
+        //$idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
+        //$item = \mywishlist\models\Item::find($idItem);
+        if(is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))){
+            $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
+            $item->nomReservation = $nom;
+            $item->update();
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+            setcookie(
+                "nomReservation",
+                $nom,
+                time() + (100 * 365 * 24 * 60 * 60) //expire dans 100 ans
+            );
+        } else {
+            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $html = $vue->render(3);
         }
 
         $rs->getBody()->write($html);

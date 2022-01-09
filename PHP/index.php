@@ -58,9 +58,6 @@ $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormula
 
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
-$app->get('/reserveItem', 'mywishlist\controller\CreationController:afficherReservationItem')->setName('affReservation');
-
-$app->post('/reserveItem', 'mywishlist\controller\CreationController:traiterReservationItem')->setName('traitReservation');
 
 
 //creer un item
@@ -76,5 +73,8 @@ $app->get(
     }
 )->setName('affUnItem');
 
+$app->post('/liste/{token}/item/{id}', 'mywishlist\controller\AffichageController:afficherUnItem')->setName('traitReservation');
+
+//$app->post('/reserveItem', 'mywishlist\controller\CreationController:traiterReservationItem')->setName('traitReservation');
 
 $app->run();

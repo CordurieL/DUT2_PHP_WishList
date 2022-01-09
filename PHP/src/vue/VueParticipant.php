@@ -118,8 +118,19 @@ class VueParticipant
     
     private function htmlUnItem() : string
     {
+
+        $champ = "";
+        if (isset($_COOKIE["nomReservation"])) {
+            $champ .= $_COOKIE["nomReservation"];
+        }
         $i = $this->tab[0];
         $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        if("$i[nomReservation]"== NULL) {
+            $content .= "<form method='POST' action=''>
+        <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
+        <button type='submit'>Réserver l'item</button>
+        </form>";
+        }
         return "<section>$content</section>";
     }
 
@@ -150,7 +161,6 @@ class VueParticipant
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
-        $url_reserverItem = $this->container->router->pathFor('affReservation');
         $url_creerItem = $this->container->router->pathFor('affFormItem');
         
 
@@ -165,7 +175,6 @@ class VueParticipant
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_reserverItem>Réserver un Item (démo, emplacement temporaire)</a></div>
     <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
     </nav>
         <br>
