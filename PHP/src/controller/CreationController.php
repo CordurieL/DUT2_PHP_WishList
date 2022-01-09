@@ -60,6 +60,13 @@ class CreationController
             $description = filter_var($data['description'], FILTER_SANITIZE_STRING);
             $tarif = filter_var($data['tarif'], FILTER_SANITIZE_NUMBER_FLOAT);
             $listeID = filter_var($data['idListe'], FILTER_SANITIZE_NUMBER_INT);
+            $item->nom =$nom;
+            $item->description = $description;
+            $item->tarif = $tarif;
+            $item->idListe = $listeID;
+            $vue = new VueCreation([$liste->toArray()], $this->container) ;
+            $html = $vue->render(6);
+            $rs->getBody()->write($html);
             return $rs;
         }
 
