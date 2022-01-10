@@ -81,7 +81,6 @@ class VueCreation
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
-        $url_creerItem = $this->container->router->pathFor('affFormItem');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -93,8 +92,7 @@ class VueCreation
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
-    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
+    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</a></div>
     </nav>
         <br>
         <div class="content">

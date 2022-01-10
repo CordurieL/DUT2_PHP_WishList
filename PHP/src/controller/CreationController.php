@@ -45,8 +45,10 @@ class CreationController
         return $rs;
     }
 
+    /*
     public function traiterFormItem(Request $rq, Response $rs, $args):Response
         {
+            $item =\mywishlist\models\Item::where('id', '=', $args['id'])->first();
             $data = $rq->getParsedBody();
             $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
             $description = filter_var($data['description'], FILTER_SANITIZE_STRING);
@@ -61,6 +63,7 @@ class CreationController
             $rs->getBody()->write($html);
             return $rs;
         }
+    */
 
     public function afficherReservationItem(Request $rq, Response $rs, $args):Response
     {
