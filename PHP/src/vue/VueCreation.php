@@ -25,6 +25,21 @@ class VueCreation
         return $content;
     }
 
+    // Inscription
+    public function creationFormulaireInscription() : string
+    {
+        $content = "<form action='' method='post'>
+            <label for='username'>Nom d'utilisateur</label>
+            <input type='text' name='username' id='username' required>
+	        <label for='password'>Mot de passe</label>
+			<input type='password' name='password' id='password' required>
+            <label for='password_confirm'>Confirmation du mot de passe</label>
+			<input type='password' name='password_confirm' id='password_confirm' required>
+            <input type='submit' value='S'inscrire'>
+            </form> \n";
+        return $content;
+    }
+
     public function listeCree():string
     {
         $l = $this->tab[0];
@@ -74,6 +89,11 @@ class VueCreation
                 $content = $this->CreationFormulaireItem();
                 break;
             }
+            case 8:
+            {
+                $content = $this->creationFormulaireInscription();
+                break;
+            }
         }
 
         $url_acceuil = $this->container->router->pathFor('acceuil');
@@ -82,6 +102,7 @@ class VueCreation
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_creerItem = $this->container->router->pathFor('affFormItem');
+        $url_inscription = $this->container->router->pathFor('inscription');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -95,6 +116,7 @@ class VueCreation
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
     <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
+    <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
     </nav>
         <br>
         <div class="content">

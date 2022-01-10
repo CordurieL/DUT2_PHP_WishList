@@ -58,7 +58,9 @@ $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormula
 
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
-
+//inscription
+$app->get('/inscription', 'mywishlist\controller\CreationController:traiterFormInscription')->setName('inscription');
+$app->post('/inscription', 'mywishlist\controller\CreationController:registerForm')->setName('inscriptionForm');
 
 //creer un item
 $app->get('/newItem', 'mywishlist\controller\CreationController:afficherCreationItem')->setName('affFormItem');

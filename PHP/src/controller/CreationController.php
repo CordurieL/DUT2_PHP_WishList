@@ -4,6 +4,7 @@ namespace mywishlist\controller;
 
 use mywishlist\models\Item;
 use mywishlist\models\Liste as Liste;
+use mywishlist\models\Compte;
 use mywishlist\vue\VueCreation as VueCreation;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -45,6 +46,26 @@ class CreationController
         return $rs;
     }
 
+    // Inscription
+    public function traiterFormInscription(Request $rq, Response $rs, $args):Response
+    {
+        $data = $rq->getParsedBody();
+        $pseudo = filter_var($data['pseudo'], FILTER_SANITIZE_STRING);
+        $pass = password_hash(filter_var($data['pass'], FILTER_SANITIZE_STRING), PASSWORD_BCRYPT);
+        $compte = new Compte();
+        $compte->pseudo = $pseudo;
+        $compte->pass = $pass;
+        $compte->save();
+        $vue = new VueCreation([$compte->toArray()], $this->container);
+        $html = $vue->render(8);
+        $rs->getBody()->write($html);
+        return $rs;
+    }
+    // à compléter 
+    public function registerForm()
+    {
+    }
+    
     public function traiterFormItem(Request $rq, Response $rs, $args):Response
         {
             $data = $rq->getParsedBody();
