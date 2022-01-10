@@ -47,6 +47,16 @@ class VueParticipant
                     copyTextarea.select();
                     document.execCommand('copy');
                 }
+
+                fuction verifChamps()
+                {
+                    var verif;
+                    if(document.getElementByClassName('crea').value == ""){
+                        verif = false;
+                    } else {
+                        verif = true;
+                    }
+                }
             </script>
             <div>
                 <input type='button' value='Copier le lien à cette page' onclick='copierLUrl();' />
@@ -54,11 +64,20 @@ class VueParticipant
             </div>
             <br>
             <form method='POST' action=''>
+            <span>Modifier la liste: </span>
 	        <input type='text' name ='editerTitre' placeholder='Titre'/>
 	        <input type='text' name ='editerDescr' placeholder='Description'/>
 	        ".//<input type='date' name ='editerDateExp' placeholder='expiration'/>
             "<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
 	        <button type='submit'>Modifier la liste</button>
+            </form>
+            <br>
+            <form method='POST' action=''>
+            <span>Ajouter un item à la liste: </span>
+            <input class='crea' type='text' name='creanom' placeholder='nom'/>
+            <input class='crea' type='text' name='creadescription' placeholder='description'/>
+            <input class='crea' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
+            <button type='submit'>Créer l'item</button>
             </form>
             <br>";
         }
@@ -161,8 +180,12 @@ class VueParticipant
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
+<<<<<<< HEAD
         $url_creerItem = $this->container->router->pathFor('affFormItem');
         $url_inscription = $this->container->router->pathFor('inscription');
+=======
+        
+>>>>>>> 6793e32f02356907e2f67415793f4a716e6bce6a
 
         $html = <<<END
 <!DOCTYPE html>
@@ -174,9 +197,13 @@ class VueParticipant
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
+<<<<<<< HEAD
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
     <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
     <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
+=======
+    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</a></div>
+>>>>>>> 6793e32f02356907e2f67415793f4a716e6bce6a
     </nav>
         <br>
         <div class="content">

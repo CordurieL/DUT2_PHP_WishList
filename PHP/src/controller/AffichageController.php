@@ -69,6 +69,20 @@ class AffichageController
             //redirect
             $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
         }
+        // pour creer un nouvel item dans une liste
+        if ((isset($data['creanom'])&&($this->verifierChamp($data['creanom']) != null))&&((isset($data['creadescription'])&&$this->verifierChamp($data['creadescription']) !=null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
+            $item = new \mywishlist\models\Item();
+            $nom = filter_var($data['creanom'], FILTER_SANITIZE_STRING);
+            $description = filter_var($data['creadescription'], FILTER_SANITIZE_STRING);
+            $tarif = filter_var($data['creatarif'], FILTER_SANITIZE_NUMBER_FLOAT);
+            $item->nom =$nom;
+            $item->descr = $description;
+            $item->tarif = $tarif;
+            $item->liste_id = $liste->no;
+            $vue = new VueCreation([$liste->toArray()], $this->container) ;
+            $item->save();
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+        }
         /* Pour les messages de liste */
         if (isset($data['contenu'])) {
             $contenuMessage = filter_var($data['contenu'], FILTER_SANITIZE_STRING);
@@ -85,6 +99,7 @@ class AffichageController
             $vue = new \mywishlist\vue\VueParticipant([$liste->toArray(),$liste->items->toArray(),$liste->messages->toArray()], $this->container) ;
             $html = $vue->render(2) ;
         }
+
         $rs->getBody()->write($html);
         return $rs;
     }
