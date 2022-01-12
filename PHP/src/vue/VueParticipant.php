@@ -48,15 +48,13 @@ class VueParticipant
                     document.execCommand('copy');
                 }
 
-                fuction verifChamps()
+                function gfds()
                 {
-                    var verif;
-                    if(document.getElementByClassName('crea').value == ''(){
-                        verif = false;
-                    } else {
-                        verif = true;
-                    }
+                if (document.getElementById('ajoutItem').value == '') {
+                   window.alert('empty');
                 }
+                }
+
             </script>
             <div>
                 <input type='button' value='Copier le lien à cette page' onclick='copierLUrl();' />
@@ -72,11 +70,12 @@ class VueParticipant
 	        <button type='submit'>Modifier la liste</button>
             </form>
             <br>
-            <form method='POST' action=''>
+            <form enctype='multipart/form-data' method='POST' action='' id='ajoutItem'>
             <span>Ajouter un item à la liste: </span>
-            <input class='crea' type='text' name='creanom' placeholder='nom'/>
-            <input class='crea' type='text' name='creadescription' placeholder='description'/>
-            <input class='crea' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
+            <input  type='text' name='creanom' placeholder='nom'/>
+            <input  type='text' name='creadescription' placeholder='description'/>
+            <input type='file' name='image' placeholder='creaimage'></td>
+            <input  type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
             <button type='submit'>Créer l'item</button>
             </form>
             <br>";
