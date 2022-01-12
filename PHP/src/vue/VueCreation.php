@@ -101,7 +101,6 @@ class VueCreation
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
-        $url_creerItem = $this->container->router->pathFor('affFormItem');
         $url_inscription = $this->container->router->pathFor('inscription');
 
         $html = <<<END
