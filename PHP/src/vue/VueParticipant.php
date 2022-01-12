@@ -144,7 +144,10 @@ class VueParticipant
         }
         //Affichage de l'item
         $i = $this->tab[0];
-        $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        $content = "</ul><hr style='border-top: 5px solid black;'>";
+        $content .= "<div>Nom de l'item : $i[nom] <br> $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
+        <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+
         //Affichage du formulaire si le nomReservation est null.
         if("$i[nomReservation]"== NULL) {
             $content .= "<form method='POST' action=''>
@@ -154,20 +157,18 @@ class VueParticipant
         </form>";
         }
         //Marque qui a réservé l'item
-        $content .= "</ul><hr style='border-top: 10px solid black;'>";
+        $content .= "</ul><hr style='border-top: 5px solid black;'>";
         if("$i[nomReservation]"!= NULL) {
-            $content .= "L'item est reservé par : $i[nomReservation]<br>";
+            $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
         }
 
         //Message au créateur si il y a un message et un nom de reservation
         if("$i[messageReservation]"!= NULL && "$i[nomReservation]"!= NULL) {
-            $content .= "</ul><hr style='border-top: 3px solid black;'>";
             $content .= "Message : <br>";
             $content .= "$i[messageReservation]<br>";
         }
         //Message au créateur si il n'y a pas de message et un nom de reservation
         if ("$i[messageReservation]"== NULL && "$i[nomReservation]"!= NULL) {
-            $content .= "</ul><hr style='border-top: 3px solid black;'>";
             $content .= "Pas de message fournis lors de la réservation. <br>";
         }
 
