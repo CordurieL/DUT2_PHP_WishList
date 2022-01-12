@@ -51,7 +51,7 @@ class VueParticipant
                 fuction verifChamps()
                 {
                     var verif;
-                    if(document.getElementByClassName('crea').value == ""){
+                    if(document.getElementByClassName('crea').value == ''(){
                         verif = false;
                     } else {
                         verif = true;
