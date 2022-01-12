@@ -114,7 +114,6 @@ class VueCreation
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_creerItem>Créer un Item (démo, emplacement temporaire)</a></div>
     <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
     </nav>
         <br>
