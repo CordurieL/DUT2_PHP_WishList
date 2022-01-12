@@ -137,19 +137,40 @@ class VueParticipant
     
     private function htmlUnItem() : string
     {
-
+        //Récupération du cookie
         $champ = "";
         if (isset($_COOKIE["nomReservation"])) {
             $champ .= $_COOKIE["nomReservation"];
         }
+        //Affichage de l'item
         $i = $this->tab[0];
         $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        //Affichage du formulaire si le nomReservation est null.
         if("$i[nomReservation]"== NULL) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
+        <textarea name='messageAuCreateur' placeholder='Méssage au createur' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Réserver l'item</button>
         </form>";
         }
+        //Marque qui a réservé l'item
+        $content .= "</ul><hr style='border-top: 10px solid black;'>";
+        if("$i[nomReservation]"!= NULL) {
+            $content .= "L'item est reservé par : $i[nomReservation]<br>";
+        }
+
+        //Message au créateur si il y a un message et un nom de reservation
+        if("$i[messageReservation]"!= NULL && "$i[nomReservation]"!= NULL) {
+            $content .= "</ul><hr style='border-top: 3px solid black;'>";
+            $content .= "Message : <br>";
+            $content .= "$i[messageReservation]<br>";
+        }
+        //Message au créateur si il n'y a pas de message et un nom de reservation
+        if ("$i[messageReservation]"== NULL && "$i[nomReservation]"!= NULL) {
+            $content .= "</ul><hr style='border-top: 3px solid black;'>";
+            $content .= "Pas de message fournis lors de la réservation. <br>";
+        }
+
         return "<section>$content</section>";
     }
 
