@@ -181,7 +181,7 @@ class VueParticipant
         <button type='submit'>Ajouter l'image</button>
         <span>
         </form>";
-        }
+
 
 
         //Marque qui a réservé l'item

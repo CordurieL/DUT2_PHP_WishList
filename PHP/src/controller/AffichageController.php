@@ -72,17 +72,18 @@ class AffichageController
         // pour creer un nouvel item dans une liste
         if ((isset($data['creanom'])&&($this->verifierChamp($data['creanom']) != null))&&((isset($data['creadescription'])&&$this->verifierChamp($data['creadescription']) !=null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
             $item = new \mywishlist\models\Item();
-            echo "test";
+
             $item->save();
             $nom = filter_var($data['creanom'], FILTER_SANITIZE_STRING);
             $description = filter_var($data['creadescription'], FILTER_SANITIZE_STRING);
-            echo $_FILES['image']['name'];
+
             $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
             if(in_array(substr($_FILES['image']['name'], -4), $types) ){
                 $extension = substr($_FILES['image']['name'], -4);
                 move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
-                $item->img = "{$item->id}.{$extension}";
+
             }
+            $item->img = "{$item->id}.{$extension}";
             $tarif = filter_var($data['creatarif'], FILTER_SANITIZE_NUMBER_FLOAT);
             $item->nom =$nom;
             $item->descr = $description;
@@ -157,6 +158,23 @@ class AffichageController
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
         } else {
+            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $html = $vue->render(3);
+        }
+
+        //ajout de l'image a l'item
+        if (is_null($item->img)&&isset($data['AJimage'])&&($this->verifierChamp($data['AJimage']) != null)) {
+
+            $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+            if(in_array(substr($_FILES['image']['name'], -4), $types) ){
+            $extension = substr($_FILES['image']['name'], -4);
+            move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+            }
+            $item->img = "{$item->id}.{$extension}";
+            $item->update();
+            $vue = new VueParticipant([$item->toArray()], $this->container);
+
+        }else {
             $vue = new VueParticipant([$item->toArray()], $this->container);
             $html = $vue->render(3);
         }
