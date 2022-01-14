@@ -48,12 +48,26 @@ class VueParticipant
                     document.execCommand('copy');
                 }
 
-                function gfds()
+                var button = document.getElementById('Bcree');
+                function verifChamps()
                 {
-                if (document.getElementById('ajoutItem').value == '') {
-                   window.alert('empty');
+                    if (document.getElementByid('cnom').value == '') {
+                        window.alert('remplissez les champs vides');
+                    }
                 }
-                }
+
+                function verifChamps() {
+                    var a = document.forms['FormAjoutItem']['creanom'].value;
+                    var b = document.forms['FormAjoutItem']['creadescription'].value;
+                    var c = document.forms['FormAjoutItem']['creatarif'].value;
+                    if (a == null || a == '', b == null || b == '', c == null || c == '') {
+                      alert('remplissez les champs');
+                      return false;
+                    }
+                  }
+
+                var button = document.getElementById('Bcree');
+                button.onclick = verifChamps;
 
             </script>
             <div>
@@ -70,13 +84,14 @@ class VueParticipant
 	        <button type='submit'>Modifier la liste</button>
             </form>
             <br>
-            <form enctype='multipart/form-data' method='POST' action='' id='ajoutItem'>
+
+            <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutItem'>
             <span>Ajouter un item à la liste: </span>
-            <input  type='text' name='creanom' placeholder='nom'/>
-            <input  type='text' name='creadescription' placeholder='description'/>
+            <input id='cnom' type='text' name='creanom' placeholder='nom'/>
+            <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
             <input type='file' name='image' placeholder='creaimage'></td>
-            <input  type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
-            <button type='submit'>Créer l'item</button>
+            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
+            <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
         }
