@@ -170,6 +170,20 @@ class VueParticipant
         <button type='submit'>Réserver l'item</button>
         </form>";
         }
+
+        //formulaire pour ajouter une image a l'item
+        $content .= "
+        <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
+        <br>
+        <span>
+        <span>Ajouter une image à cet item :</span>
+        <input type='file' name='image' placeholder='AJimage'></td>
+        <button type='submit'>Ajouter l'image</button>
+        <span>
+        </form>";
+        }
+
+
         //Marque qui a réservé l'item
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
         if("$i[nomReservation]"!= NULL) {

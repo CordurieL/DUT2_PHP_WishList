@@ -92,6 +92,7 @@ class AffichageController
             $item->save();
             $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
         }
+
         /* Pour les messages de liste */
         if (isset($data['contenu'])) {
             $contenuMessage = filter_var($data['contenu'], FILTER_SANITIZE_STRING);
