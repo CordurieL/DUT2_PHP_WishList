@@ -22,11 +22,13 @@ class VueParticipant
 
     private function htmlListes() : string
     {
-        $content = "\n";
+        $content = "<h1>Listes publiques :</h1><br>Nom de la liste ; date d'expiration<br><br>";
         foreach ($this->tab as $l) {
-            $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
-            $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
-            $content .= "<article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $dateDExp ; $l[token]</article>\n";
+            if ($l['valide']) {
+                $dateDExpString = (new \DateTime("$l[expiration]"))->format('d-m-Y');
+                $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+                $content .= " <a href=$url><article>$l[titre] ; jusqu'au $dateDExpString</article></a><br>";
+            }
         }
         return "<section>$content</section>";
     }
@@ -270,7 +272,7 @@ class VueParticipant
     <nav>
     <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
-    <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
+    <div><a href=$url_listes>Listes publiques</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
     <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>

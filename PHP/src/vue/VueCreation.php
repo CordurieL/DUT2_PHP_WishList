@@ -15,10 +15,11 @@ class VueCreation
 
     public function CreationformulaireListe(): string
     {
+        $today = (new \DateTime('tomorrow'))->format('Y-m-d');
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='titre' placeholder='titre'/><br>
+	        <input type='text' name ='titre' placeholder='titre' required/><br>
 	        <input type='text' name ='description' placeholder='descri'/><br>
-	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration'/></div><br>
+	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$today' min='$today'/></div><br>
 	        <button type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
@@ -111,7 +112,7 @@ class VueCreation
     <nav>
     <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
-    <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
+    <div><a href=$url_listes>Listes publiques</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
     <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
