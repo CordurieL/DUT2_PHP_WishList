@@ -22,12 +22,18 @@ class VueParticipant
 
     private function htmlListes() : string
     {
-        $content = "<h1>Listes publiques :</h1><br>Nom de la liste ; date d'expiration<br><br>";
-        foreach ($this->tab as $l) {
-            if ($l['valide']) {
-                $dateDExpString = (new \DateTime("$l[expiration]"))->format('d-m-Y');
+        $content = "<h1>Listes publiques :</h1>";
+        $listes = $this->tab;
+        usort($listes, function ($l1, $l2) {
+            $exp1 = strtotime($l1['expiration']);
+            $exp2 = strtotime($l2['expiration']);
+            return $exp1 - $exp2;
+        });
+        foreach ($listes as $l) {
+            $dateDExp = (new \DateTime("$l[expiration]"));
+            if ($l['valide'] && ((new \DateTime()) < $dateDExp)) {
                 $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
-                $content .= " <a href=$url><article>$l[titre] ; jusqu'au $dateDExpString</article></a><br>";
+                $content .= "<a href=$url><article><h3>$l[titre]</h3></article></a>";
             }
         }
         return "<section>$content</section>";

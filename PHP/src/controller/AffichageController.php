@@ -50,30 +50,6 @@ class AffichageController
         return $rs;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
         /* Récupération des infos générales */
@@ -156,39 +132,6 @@ class AffichageController
         $rs->getBody()->write($html);
         return $rs;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function afficherUnItem(Request $rq, Response $rs, $args):Response
     {
