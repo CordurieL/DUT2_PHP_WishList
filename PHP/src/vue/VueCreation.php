@@ -15,11 +15,11 @@ class VueCreation
 
     public function CreationformulaireListe(): string
     {
-        $today = (new \DateTime('tomorrow'))->format('Y-m-d');
+        $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
         $content = "<form method='POST' action=''>
 	        <input type='text' name ='titre' placeholder='titre' required/><br>
 	        <input type='text' name ='description' placeholder='descri'/><br>
-	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$today' min='$today'/></div><br>
+	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
 	        <button type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
