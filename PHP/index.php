@@ -23,8 +23,8 @@ $db->bootEloquent();
 
 $app->get(
     '/',
-    'mywishlist\controller\AffichageController:afficherAcceuil'
-)->setName('acceuil');
+    'mywishlist\controller\AffichageController:afficherAccueil'
+)->setName('Accueil');
 
 $app->get(
     '/test',

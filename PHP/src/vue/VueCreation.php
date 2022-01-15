@@ -96,7 +96,7 @@ class VueCreation
             }
         }
 
-        $url_acceuil = $this->container->router->pathFor('acceuil');
+        $url_Accueil = $this->container->router->pathFor('Accueil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
@@ -109,7 +109,7 @@ class VueCreation
     <body>
     <h1>My WishList</h1>
     <nav>
-    <div><a href=$url_acceuil>Accueil</a></div>
+    <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>

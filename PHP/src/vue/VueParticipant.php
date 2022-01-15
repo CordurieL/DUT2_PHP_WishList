@@ -14,9 +14,9 @@ class VueParticipant
         $this->container = $container;
     }
 
-    private function htmlAcceuil() : string
+    private function htmlAccueil() : string
     {
-        $content = "Bonjour acceuil";
+        $content = "Bienvenue à l'accueil";
         return $content;
     }
 
@@ -34,7 +34,8 @@ class VueParticipant
     private function htmlUneListe() : string
     {
         $l = $this->tab[0];
-        $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
+        $dateDExp = (new \DateTime("$l[expiration]"));
+        $dateDExpString = $dateDExp->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
         $content = "";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
@@ -101,7 +102,7 @@ class VueParticipant
             </form>
             <br>";
         }
-        $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $dateDExp<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
+        $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $dateDExpString<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
         $item = $this->tab[1];
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
@@ -109,7 +110,7 @@ class VueParticipant
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
             /* Le token pour savoir si on est l'éditeur */
-            if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && (((new \DateTime('NOW'))->format('d-m-Y')) < $dateDExp)) {
+            if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && ((new \DateTime()) < $dateDExp)) {
                 $etatItem = "$i[nomReservation]";
                 if ($etatItem == null) {
                     $etatItem = "Pas encore réservé";
@@ -131,7 +132,7 @@ class VueParticipant
                     }
                 }
                 </script>
-                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item avant le $dateDExp<br>
+                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item avant le $dateDExpString<br>
                 <span>
                 Etat de la réservation : 
                     <input id='reservCacheeBouton' type='button' value='Voir' onclick='montrerReserv(this);'>
@@ -208,12 +209,32 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
+    private function htmlListeInacessible() : string
+    {
+        $l = $this->tab[0];
+        $content = "";
+        $dateDExp = (new \DateTime("$l[expiration]"));
+        $now = new \DateTime();
+        $url_Accueil = $this->container->router->pathFor('Accueil');
+        if ($now > $dateDExp) {
+            $content .= "<h1>Cette liste est expirée</h1>
+        <img style='max-width: 500px' src='../../Ressources/img/end.jpg'></div><br>
+        ";
+        } else {
+            $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
+        <img style='max-width: 500px' src='../../Ressources/img/soon.jpg'></div><br>
+        ";
+        }
+        $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
+        return "<section>$content</section>";
+    }
+
 
     public function render($selecteur)
     {
         switch ($selecteur) {
         case 0: {
-         $content = $this->htmlAcceuil();
+         $content = $this->htmlAccueil();
          break;
          }
          case 1: {
@@ -228,9 +249,13 @@ class VueParticipant
          $content = $this->htmlUnItem();
          break;
          }
+         case 4: {
+        $content = $this->htmlListeInacessible();
+        break;
+        }
         }
 
-        $url_acceuil = $this->container->router->pathFor('acceuil');
+        $url_Accueil = $this->container->router->pathFor('Accueil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
         $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
@@ -243,7 +268,7 @@ class VueParticipant
     <body>
     <h1>My WishList</h1>
     <nav>
-    <div><a href=$url_acceuil>Accueil</a></div>
+    <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Aperçu de toutes les listes (temporaire)</a></div>
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
