@@ -92,7 +92,7 @@ class AffichageController
                     $description = filter_var($data['creadescription'], FILTER_SANITIZE_STRING);
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
                     if (in_array(substr($_FILES['image']['name'], -4), $types)) {
-                        $extension = substr($_FILES['image']['name'], -4);
+                        $extension = substr($_FILES['image']['name'], -3);
                         move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
                     }
                     $item->img = "{$item->id}.{$extension}";
