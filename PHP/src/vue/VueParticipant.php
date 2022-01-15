@@ -47,6 +47,28 @@ class VueParticipant
                     copyTextarea.select();
                     document.execCommand('copy');
                 }
+
+                var button = document.getElementById('Bcree');
+                function verifChamps()
+                {
+                    if (document.getElementByid('cnom').value == '') {
+                        window.alert('remplissez les champs vides');
+                    }
+                }
+
+                function verifChamps() {
+                    var a = document.forms['FormAjoutItem']['creanom'].value;
+                    var b = document.forms['FormAjoutItem']['creadescription'].value;
+                    var c = document.forms['FormAjoutItem']['creatarif'].value;
+                    if (a == null || a == '', b == null || b == '', c == null || c == '') {
+                      alert('remplissez les champs');
+                      return false;
+                    }
+                  }
+
+                var button = document.getElementById('Bcree');
+                button.onclick = verifChamps;
+
             </script>
             <div>";
             if ($l['valide'] == 1) {
@@ -68,12 +90,14 @@ class VueParticipant
 	        <button type='submit'>Modifier la liste</button>
             </form>
             <br>
-            <form method='POST' action=''>
+
+            <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutItem'>
             <span>Ajouter un item à la liste: </span>
-            <input class='crea' type='text' name='creanom' placeholder='nom'/>
-            <input class='crea' type='text' name='creadescription' placeholder='description'/>
-            <input class='crea' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
-            <button type='submit'>Créer l'item</button>
+            <input id='cnom' type='text' name='creanom' placeholder='nom'/>
+            <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
+            <input type='file' name='image' placeholder='creaimage'></td>
+            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
+            <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
         }
@@ -133,18 +157,54 @@ class VueParticipant
     
     private function htmlUnItem() : string
     {
+        //Récupération du cookie
         $champ = "";
         if (isset($_COOKIE["nomReservation"])) {
             $champ .= $_COOKIE["nomReservation"];
         }
+        //Affichage de l'item
         $i = $this->tab[0];
-        $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        $content = "</ul><hr style='border-top: 5px solid black;'>";
+        $content .= "<div>Nom de l'item : $i[nom] <br> $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
+        <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        //Affichage du formulaire si le nomReservation est null.
         if ("$i[nomReservation]"== null) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
+        <textarea name='messageAuCreateur' placeholder='Méssage au createur' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Réserver l'item</button>
         </form>";
         }
+
+        //formulaire pour ajouter une image a l'item
+        $content .= "
+        <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
+        <br>
+        <span>
+        <span>Ajouter une image à cet item :</span>
+        <input type='file' name='image' placeholder='AJimage'></td>
+        <button type='submit'>Ajouter l'image</button>
+        <span>
+        </form>";
+
+
+
+        //Marque qui a réservé l'item
+        $content .= "</ul><hr style='border-top: 5px solid black;'>";
+        if ("$i[nomReservation]"!= null) {
+            $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
+        }
+
+        //Message au créateur si il y a un message et un nom de reservation
+        if ("$i[messageReservation]"!= null && "$i[nomReservation]"!= null) {
+            $content .= "Message : <br>";
+            $content .= "$i[messageReservation]<br>";
+        }
+        //Message au créateur si il n'y a pas de message et un nom de reservation
+        if ("$i[messageReservation]"== null && "$i[nomReservation]"!= null) {
+            $content .= "Pas de message fournis lors de la réservation. <br>";
+        }
+
         return "<section>$content</section>";
     }
 

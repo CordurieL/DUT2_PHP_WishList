@@ -77,8 +77,17 @@ class AffichageController
         // pour creer un nouvel item dans une liste
         if ((isset($data['creanom'])&&($this->verifierChamp($data['creanom']) != null))&&((isset($data['creadescription'])&&$this->verifierChamp($data['creadescription']) !=null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
             $item = new \mywishlist\models\Item();
+
+            $item->save();
             $nom = filter_var($data['creanom'], FILTER_SANITIZE_STRING);
             $description = filter_var($data['creadescription'], FILTER_SANITIZE_STRING);
+
+            $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+            if (in_array(substr($_FILES['image']['name'], -4), $types)) {
+                $extension = substr($_FILES['image']['name'], -4);
+                move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+            }
+            $item->img = "{$item->id}.{$extension}";
             $tarif = filter_var($data['creatarif'], FILTER_SANITIZE_NUMBER_FLOAT);
             $item->nom =$nom;
             $item->descr = $description;
@@ -88,6 +97,7 @@ class AffichageController
             $item->save();
             $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
         }
+
         /* Pour les messages de liste */
         if (isset($data['contenu'])) {
             $contenuMessage = filter_var($data['contenu'], FILTER_SANITIZE_STRING);
@@ -125,6 +135,7 @@ class AffichageController
         $data = $rq->getParsedBody();
         //$idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
         //$item = \mywishlist\models\Item::find($idItem);
+        //traitement nom reservation
         if (is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))) {
             $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
             $item->nomReservation = $nom;
@@ -136,6 +147,35 @@ class AffichageController
                 time() + (100 * 365 * 24 * 60 * 60), //expire dans 100 ans
                 "/"
             );
+        } else {
+            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $html = $vue->render(3);
+        }
+
+        //traitement message
+        if (is_null($item->messageReservation)&&isset($data['messageAuCreateur'])&&($this->verifierChamp($data['messageAuCreateur']) != null)) {
+            $contenuMessage = filter_var($data['messageAuCreateur'], FILTER_SANITIZE_STRING);
+            $messageLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuMessage)));
+            if ($contenuMessage != "" && $contenuMessage != null && $messageLength >0 && $messageLength <250) {
+                $item->messageReservation = $contenuMessage;
+                $item->update();
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+            }
+        } else {
+            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $html = $vue->render(3);
+        }
+
+        //ajout de l'image a l'item
+        if (is_null($item->img)&&isset($data['AJimage'])&&($this->verifierChamp($data['AJimage']) != null)) {
+            $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+            if (in_array(substr($_FILES['image']['name'], -4), $types)) {
+                $extension = substr($_FILES['image']['name'], -4);
+                move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+            }
+            $item->img = "{$item->id}.{$extension}";
+            $item->update();
+            $vue = new VueParticipant([$item->toArray()], $this->container);
         } else {
             $vue = new VueParticipant([$item->toArray()], $this->container);
             $html = $vue->render(3);
