@@ -47,6 +47,7 @@ CREATE TABLE `liste` (
   `expiration` date DEFAULT NULL,
   `token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token_edition` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `valide` boolean not null default 0,
   PRIMARY KEY (`no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

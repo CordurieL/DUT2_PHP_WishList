@@ -47,21 +47,17 @@ class VueParticipant
                     copyTextarea.select();
                     document.execCommand('copy');
                 }
-
-                fuction verifChamps()
-                {
-                    var verif;
-                    if(document.getElementByClassName('crea').value == ''(){
-                        verif = false;
-                    } else {
-                        verif = true;
-                    }
-                }
             </script>
-            <div>
-                <input type='button' value='Copier le lien à cette page' onclick='copierLUrl();' />
-                <textarea id='ZoneUrl' rows='1' cols='65'></textarea>
-            </div>
+            <div>";
+            if ($l['valide'] == 1) {
+                $content .= "<input type='button' value='Copier le lien à cette page' onclick='copierLUrl();' />
+                <textarea id='ZoneUrl' rows='1' cols='65'></textarea>";
+            } else {
+                $content .= "<form method='POST' action=''>
+                <button name='publicationButton' type='submit'>Rendre la liste publique</button>
+                </form>";
+            }
+            $content .="</div>
             <br>
             <form method='POST' action=''>
             <span>Modifier la liste: </span>
@@ -137,14 +133,13 @@ class VueParticipant
     
     private function htmlUnItem() : string
     {
-
         $champ = "";
         if (isset($_COOKIE["nomReservation"])) {
             $champ .= $_COOKIE["nomReservation"];
         }
         $i = $this->tab[0];
         $content = "<div>$i[id] ; $i[liste_id] ; $i[nom] ; $i[descr] ; $i[url] ; $i[tarif] <br><img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
-        if("$i[nomReservation]"== NULL) {
+        if ("$i[nomReservation]"== null) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
         <button type='submit'>Réserver l'item</button>

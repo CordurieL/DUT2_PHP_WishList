@@ -55,6 +55,11 @@ class AffichageController
         $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
         $data = $rq->getParsedBody();
         /* Pour les modifications d'informations generales de la liste */
+        if ((isset($data['publicationButton']))) {
+            $liste->valide = 1;
+            $liste->save();
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+        }
         if ((isset($data['editerTitre'])&&($this->verifierChamp($data['editerTitre']) != null))||((isset($data['editerDescr'])&&$this->verifierChamp($data['editerDescr']) !=null))||((isset($data['editerDateExp'])&&$this->verifierChamp($data['editerDateExp'])!=null))) {
             if (($nouveauTitre = $this->verifierChamp($data['editerTitre'])) != null) {
                 $liste->titre = $nouveauTitre;
@@ -120,7 +125,7 @@ class AffichageController
         $data = $rq->getParsedBody();
         //$idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
         //$item = \mywishlist\models\Item::find($idItem);
-        if(is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))){
+        if (is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))) {
             $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
             $item->nomReservation = $nom;
             $item->update();
