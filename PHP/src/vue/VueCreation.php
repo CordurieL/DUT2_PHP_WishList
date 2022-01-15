@@ -58,19 +58,6 @@ class VueCreation
         return $content;
     }
 
-    public function CreationFormulaireItem():string
-    {
-        $content = "<form method='POST' action=''>
-        <input type='text' name='nom' placeholder='nom'/><br>
-        <input type='text' name='description' placeholder='description'/><br>
-        <input type='number' name='tarif' placeholder='tarif' step='0.01' min='0' /><br>
-        <input type='number' name='idListe' placeholder='idListe'/><br>
-        <button type='submit'>Créer l'item</button>
-        </form>";
-        echo "\n";
-        return $content;
-    }
-
 
     public function render($selecteur)
     {
@@ -83,11 +70,6 @@ class VueCreation
             case 2:
             {
                $content = $this->listeCree();
-                break;
-            }
-            case 3:
-            {
-                $content = $this->CreationFormulaireItem();
                 break;
             }
             case 8:

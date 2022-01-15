@@ -61,35 +61,9 @@ class CreationController
         $rs->getBody()->write($html);
         return $rs;
     }
-    // à compléter 
+    
+    // à compléter
     public function registerForm()
     {
-    }
-    
-    public function traiterFormItem(Request $rq, Response $rs, $args):Response
-        {
-            $item =\mywishlist\models\Item::where('id', '=', $args['id'])->first();
-            $data = $rq->getParsedBody();
-            $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
-            $description = filter_var($data['description'], FILTER_SANITIZE_STRING);
-            $tarif = filter_var($data['tarif'], FILTER_SANITIZE_NUMBER_FLOAT);
-            $listeID = filter_var($data['idListe'], FILTER_SANITIZE_NUMBER_INT);
-            $item->nom =$nom;
-            $item->description = $description;
-            $item->tarif = $tarif;
-            $item->idListe = $listeID;
-            $vue = new VueCreation([$liste->toArray()], $this->container) ;
-            $html = $vue->render(6);
-            $rs->getBody()->write($html);
-            return $rs;
-        }
-    
-
-    public function afficherReservationItem(Request $rq, Response $rs, $args):Response
-    {
-        $vue = new VueCreation([], $this->container);
-        $html = $vue->render(3) ;
-        $rs->getBody()->write($html);
-        return $rs;
     }
 }
