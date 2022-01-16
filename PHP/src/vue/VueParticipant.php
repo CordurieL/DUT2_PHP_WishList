@@ -233,7 +233,7 @@ class VueParticipant
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédé plus le token d'édition cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
-         <input type='number' name='tarifItem'  placeholder='Tarif de litem'/><br>
+        <input type='number' name='tarifItem' step ='0.01' min='0' placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
@@ -246,9 +246,12 @@ class VueParticipant
 
         //formulaire pour supprimer un item
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp){
-
+            $content .="<br>En guise de sécurité, pour supprimer l'item tapez ci-dessous : Je souhaite supprimer l'item
+            <form method='POST' action=''>
+            <input type='text' name='securiteSupprimerItem' placeholder='tapez ici'/><br>
+            <button type='submit'>Supprimer l'item</button>
+            </form>";
         }
-
         return "<section>$content</section>";
     }
 
