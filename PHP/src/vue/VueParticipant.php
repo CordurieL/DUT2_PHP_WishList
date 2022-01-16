@@ -185,7 +185,7 @@ class VueParticipant
         $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
 
-        //Affichage du formulaire si le nomReservation est null.
+        //Affichage du formulaire si le nomReservation est null et date d'expiration passé
         if ("$i[nomReservation]"== null&& (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
@@ -229,7 +229,7 @@ class VueParticipant
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédé plus le token d'édition cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
-         <input type='text' name='tarifItem'  placeholder='Tarif de litem'/><br>
+         <input type='number' name='tarifItem'  placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
@@ -239,10 +239,18 @@ class VueParticipant
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"!= null&&(new \DateTime()) < $dateDExp) {
             $content .= "Tu ne peux plus modifier cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
         }
+
+        //formulaire pour supprimer un item
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp){
+
+        }
+
         return "<section>$content</section>";
     }
 
-        //formulaire pour modifier un item
+
+
+
 
 
     private function htmlListeInacessible() : string
