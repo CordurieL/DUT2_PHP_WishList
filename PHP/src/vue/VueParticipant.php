@@ -183,7 +183,7 @@ class VueParticipant
         $dateDExp = (new \DateTime("$l[expiration]"));
 
         $content = "</ul><hr style='border-top: 5px solid black;'>";
-        if (isset($_COOKIE["TokenEdition:".$tokenEdition])){
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CETTE ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
         $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
@@ -212,7 +212,7 @@ class VueParticipant
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
-        if((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
+        if ((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ("$i[nomReservation]" != null) {
                 $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
             }
@@ -246,23 +246,24 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
-        //formulaire pour modifier un item
+    //formulaire pour modifier un item
 
 
     private function htmlListeInacessible() : string
     {
         $l = $this->tab[0];
+        $appel = $this->tab[2]; // vaut ../../ si l'appel viens d'un affichage item, vide sinon
         $content = "";
         $dateDExp = (new \DateTime("$l[expiration]"));
         $now = new \DateTime();
         $url_Accueil = $this->container->router->pathFor('Accueil');
         if ($now > $dateDExp) {
             $content .= "<h1>Cette liste est expirée</h1>
-        <img style='max-width: 500px' src='../../Ressources/img/end.jpg'></div><br>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/end.jpg'></div><br>
         ";
         } else {
             $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
-        <img style='max-width: 500px' src='../../Ressources/img/soon.jpg'></div><br>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/soon.jpg'></div><br>
         ";
         }
         $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
