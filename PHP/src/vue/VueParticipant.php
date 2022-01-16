@@ -185,7 +185,7 @@ class VueParticipant
         $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
 
-        //Affichage du formulaire si le nomReservation est null et date d'expiration passé
+        //Affichage du formulaire si le nomReservation est null
         if ("$i[nomReservation]"== null&& (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
@@ -206,7 +206,7 @@ class VueParticipant
         </form>";
 
 
-        //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'
+        //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
         if((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ("$i[nomReservation]" != null) {
