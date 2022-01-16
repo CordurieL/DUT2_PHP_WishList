@@ -241,7 +241,7 @@ class VueParticipant
 
         //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom resevartion non null + date inférieur a la date dexpiration.
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"!= null&&(new \DateTime()) < $dateDExp) {
-            $content .= "Tu ne peux plus modifier cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
+            $content .= "Tu ne peux plus modifier ou supprimer cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
         }
 
         //formulaire pour supprimer un item
