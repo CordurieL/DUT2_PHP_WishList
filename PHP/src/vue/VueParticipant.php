@@ -184,7 +184,7 @@ class VueParticipant
 
         $content = "</ul><hr style='border-top: 5px solid black;'>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])){
-            $content .= "CETTE ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
+            $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
         $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
@@ -210,12 +210,13 @@ class VueParticipant
         <input type='file' name='image' placeholder='creaimage'></td>
         <button type='submit'>Ajouter l'image</button>
         <span>
+
         </form>
-        <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'>
-                <br>
+        <form method='POST' action='upload_image.php' id='FormLinkImageItem'>
+        <br>
         <span>Ajouter une image via un lien à cet item :</span>
         <input type='text' name='urlimage' placeholder='url_image'></td>
-        <button type='submit'>Ajouter l'image</button>
+        <button type='submit' name='linkimage'>Ajouter l'image</button>
         <span>
         </form>";
         }

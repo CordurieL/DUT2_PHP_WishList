@@ -183,7 +183,7 @@ class AffichageController
             $html = $vue->render(3);
         }
 
-        //ajout de l'image a l'item
+        //ajout de l'image a l'item pour un fichier venant de l'ordinateur
         if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
             if (($_FILES['image']['size'] != 0)){
                 $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
@@ -192,6 +192,26 @@ class AffichageController
                     move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
                 }
                 $item->img = "{$item->id}.{$extension}";
+                $item->update();
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+            } else {
+                $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
+                $html = $vue->render(3);
+            }
+        }
+
+        //ajout d'une image a un item via un lien
+        if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
+            if (isset($_POST['linkimage'])){
+
+                $url=$_POST['urlimage'];
+                $data = file_get_contents($url);
+                $extension = substr($_FILES['image']['name'], -3);
+                $file = "../Ressources/img";
+                file_put_contents($file, $data);
+
+                $item->img = "{$item->id}.{$extension}";
+                $item->url = $url;
                 $item->update();
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             } else {
