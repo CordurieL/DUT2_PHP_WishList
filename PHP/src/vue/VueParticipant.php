@@ -177,11 +177,20 @@ class VueParticipant
         }
         //Affichage de l'item
         $i = $this->tab[0];
+        $l = $this->tab[1];
+
+        $tokenEdition = "$l[token_edition]";
+        $dateDExp = (new \DateTime("$l[expiration]"));
+
         $content = "</ul><hr style='border-top: 5px solid black;'>";
-        $content .= "<div>Nom de l'item : $i[nom] <br> $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])){
+            $content .= "CETTE ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
+        }
+        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+
         //Affichage du formulaire si le nomReservation est null.
-        if ("$i[nomReservation]"== null) {
+        if ("$i[nomReservation]"== null&& (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
         <textarea name='messageAuCreateur' placeholder='Méssage au createur' maxlength=255 cols=50 rows=8></textarea><br>
@@ -201,25 +210,44 @@ class VueParticipant
         </form>";
 
 
-
-        //Marque qui a réservé l'item
+        //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
-        if ("$i[nomReservation]"!= null) {
-            $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
+        if((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
+            if ("$i[nomReservation]" != null) {
+                $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
+            }
+
+            //Message au créateur si il y a un message et un nom de reservation
+            if ("$i[messageReservation]" != null && "$i[nomReservation]" != null) {
+                $content .= "Message : <br>";
+                $content .= "$i[messageReservation]<br>";
+            }
+            //Message au créateur si il n'y a pas de message et un nom de reservation
+            if ("$i[messageReservation]" == null && "$i[nomReservation]" != null) {
+                $content .= "Pas de message fournis lors de la réservation. <br>";
+            }
         }
 
-        //Message au créateur si il y a un message et un nom de reservation
-        if ("$i[messageReservation]"!= null && "$i[nomReservation]"!= null) {
-            $content .= "Message : <br>";
-            $content .= "$i[messageReservation]<br>";
-        }
-        //Message au créateur si il n'y a pas de message et un nom de reservation
-        if ("$i[messageReservation]"== null && "$i[nomReservation]"!= null) {
-            $content .= "Pas de message fournis lors de la réservation. <br>";
+        //formulaire pour modifier un item qui s'affiche si il possede tokenedition + un nom de reservation null + date courante inferieur a date expiration
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp) {
+            $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédé plus le token d'édition cette action deviendra impossible)
+        <form method='POST' action=''>
+        <input type='text' name='nomItem'  placeholder='Nom de litem'/>
+         <input type='text' name='tarifItem'  placeholder='Tarif de litem'/><br>
+        <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
+        <button type='submit'>Modifier l'item</button>
+        </form>";
         }
 
+        //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom resevartion non null + date inférieur a la date dexpiration.
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"!= null&&(new \DateTime()) < $dateDExp) {
+            $content .= "Tu ne peux plus modifier cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
+        }
         return "<section>$content</section>";
     }
+
+        //formulaire pour modifier un item
+
 
     private function htmlListeInacessible() : string
     {

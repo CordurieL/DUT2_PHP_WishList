@@ -139,10 +139,10 @@ class AffichageController
         $liste = $item->liste;
         $tokenListe = $liste->token;
         if ($tokenListe === $args['token']) {
-            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+            $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()],$this->container) ;
             $html = $vue->render(3) ;
         } else {
-            $vue = new \mywishlist\vue\VueParticipant([ $item ], $this->container) ;
+            $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()],$this->container) ;
             $html = $vue->render(0) ; // retourne à l'accueil
         }
 
@@ -162,7 +162,7 @@ class AffichageController
                 "/"
             );
         } else {
-            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
             $html = $vue->render(3);
         }
 
@@ -176,7 +176,7 @@ class AffichageController
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
         } else {
-            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
             $html = $vue->render(3);
         }
 
@@ -189,10 +189,25 @@ class AffichageController
             }
             $item->img = "{$item->id}.{$extension}";
             $item->update();
-            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
         } else {
-            $vue = new VueParticipant([$item->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
             $html = $vue->render(3);
+        }
+
+        //modifier un item
+        if  (isset($data['nomItem'])&&($this->verifierChamp($data['nomItem']) != null)||isset($data['tarifItem'])&&($this->verifierChamp($data['tarifItem']) != null)||isset($data['descriItem'])&&($this->verifierChamp($data['descriItem']) != null)) {
+            if (($nouveauNomItem = $this->verifierChamp($data['nomItem'])) != null) {
+                $item->nom = $nouveauNomItem;
+            }
+            if (($nouveauTarifItem = $this->verifierChamp($data['tarifItem'])) != null) {
+                $item->tarif = $nouveauTarifItem;
+            }
+            if (($nouveauDescriItem = $this->verifierChamp($data['descriItem'])) != null) {
+                $item->descr = $nouveauDescriItem;
+            }
+            $item->update();
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
         }
 
         $rs->getBody()->write($html);
