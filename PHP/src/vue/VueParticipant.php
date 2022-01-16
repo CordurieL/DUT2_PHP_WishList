@@ -140,7 +140,7 @@ class VueParticipant
                     }
                 }
                 </script>
-                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réserver cet item avant le $dateDExpString<br>
+                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réservé cet item avant le $dateDExpString<br>
                 <span>
                 Etat de la réservation : 
                     <input id='reservCacheeBouton' type='button' value='Voir' onclick='montrerReserv(this);'>
@@ -193,22 +193,32 @@ class VueParticipant
         if ("$i[nomReservation]"== null&& (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
             $content .= "<form method='POST' action=''>
         <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
-        <textarea name='messageAuCreateur' placeholder='Méssage au createur' maxlength=255 cols=50 rows=8></textarea><br>
+        <textarea name='messageAuCreateur' placeholder='Message au createur' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Réserver l'item</button>
         </form>";
         }
 
         //formulaire pour ajouter une image a l'item
+        $l = $this->tab[1];
+        $tokenEdition = $l['token_edition'];
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
         $content .= "
         <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
         <br>
         <span>
-        <span>Ajouter une image à cet item :</span>
-        <input type='file' name='image' placeholder='AJimage'></td>
+        <span>Ajouter une image de l'ordinateur à cet item :</span>
+        <input type='file' name='image' placeholder='creaimage'></td>
+        <button type='submit'>Ajouter l'image</button>
+        <span>
+        </form>
+        <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'>
+                <br>
+        <span>Ajouter une image via un lien à cet item :</span>
+        <input type='text' name='urlimage' placeholder='url_image'></td>
         <button type='submit'>Ajouter l'image</button>
         <span>
         </form>";
-
+        }
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
@@ -234,7 +244,7 @@ class VueParticipant
 
         //formulaire pour modifier un item qui s'affiche si il possede tokenedition + un nom de reservation null + date courante inferieur a date expiration
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp) {
-            $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédé plus le token d'édition cette action deviendra impossible)
+            $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédez plus le token d'édition, cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
         <input type='number' name='tarifItem' step ='0.01' min='0' placeholder='Tarif de litem'/><br>
@@ -245,7 +255,7 @@ class VueParticipant
 
         //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom resevartion non null + date inférieur a la date dexpiration.
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"!= null&&(new \DateTime()) < $dateDExp) {
-            $content .= "Tu ne peux plus modifier ou supprimer cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
+            $content .= "Vous ne pouvez plus modifier ou supprimer cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
         }
 
         //formulaire pour supprimer un item
@@ -276,7 +286,7 @@ class VueParticipant
         <img style='max-width: 500px' src='../../Ressources/img/end.jpg'></div><br>
         ";
         } else {
-            $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
+            $content .= "<h1>Cette liste n'a pas encore été rendue publique par son créateur</h1>
         <img style='max-width: 500px' src='../../Ressources/img/soon.jpg'></div><br>
         ";
         }

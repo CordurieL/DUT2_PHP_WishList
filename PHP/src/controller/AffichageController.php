@@ -135,14 +135,17 @@ class AffichageController
 
     public function afficherUnItem(Request $rq, Response $rs, $args):Response
     {
+        $liste =\mywishlist\models\Liste::where('token', '=', $args['token'])->first();
+        $tokenEdition = "$liste[token_edition]";
+
         $item = \mywishlist\models\Item::find($args['id']) ;
         $liste = $item->liste;
         $tokenListe = $liste->token;
         if ($tokenListe === $args['token']) {
-            $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()],$this->container) ;
+            $vue = new \mywishlist\vue\VueParticipant([ $item ,$liste->toArray()], $this->container) ;
             $html = $vue->render(3) ;
         } else {
-            $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()],$this->container) ;
+            $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
             $html = $vue->render(0) ; // retourne à l'accueil
         }
 
@@ -162,7 +165,7 @@ class AffichageController
                 "/"
             );
         } else {
-            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
             $html = $vue->render(3);
         }
 
@@ -176,23 +179,25 @@ class AffichageController
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
         } else {
-            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
+            $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
             $html = $vue->render(3);
         }
 
         //ajout de l'image a l'item
-        if (is_null($item->img)&&isset($data['AJimage'])&&($this->verifierChamp($data['AJimage']) != null)) {
-            $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
-            if (in_array(substr($_FILES['image']['name'], -4), $types)) {
-                $extension = substr($_FILES['image']['name'], -4);
-                move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+        if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
+            if (($_FILES['image']['size'] != 0)){
+                $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+                if (in_array(substr($_FILES['image']['name'], -4), $types)) {
+                    $extension = substr($_FILES['image']['name'], -3);
+                    move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+                }
+                $item->img = "{$item->id}.{$extension}";
+                $item->update();
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+            } else {
+                $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
+                $html = $vue->render(3);
             }
-            $item->img = "{$item->id}.{$extension}";
-            $item->update();
-            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-        } else {
-            $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-            $html = $vue->render(3);
         }
 
         //modifier un item
