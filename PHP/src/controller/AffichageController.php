@@ -197,22 +197,29 @@ class AffichageController
                 }
             }
 
+            //ajout de l'image a l'item via un lien
+            if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
+
+                if(isset($_POST['urlimage'])){
+
+                    $url = $_POST['urlimage'];
+                    $data = file_get_contents($url);
+                    $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+                    if (in_array(substr($url, -4), $types)) {
+                        echo "<img src='../Ressources/url_img/{$url}'>";
+
+                        $item->img = $url;
+                    }
+                        $item->update();
+                        $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                }
+
+            }
+
             /* Pour devenir une cagnotte */
             if ((isset($data['rendreCagnotte']))) {
                 $item->estUneCagnotte = true;
                 $item->save();
-                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
-            }
-
-            //ajout de l'image a l'item
-            if (is_null($item->img)&&isset($data['AJimage'])&&($this->verifierChamp($data['AJimage']) != null)) {
-                $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
-                if (in_array(substr($_FILES['image']['name'], -4), $types)) {
-                    $extension = substr($_FILES['image']['name'], -4);
-                    move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
-                }
-                $item->img = "{$item->id}.{$extension}";
-                $item->update();
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
 
