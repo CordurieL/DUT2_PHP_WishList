@@ -88,6 +88,8 @@ class VueParticipant
                 <button name='publicationButton' type='submit'>Rendre la liste publique</button>
                 </form>";
             }
+            $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
+            $normalExp = (new \DateTime($l['expiration']))->format('Y-m-d');
             $content .="</div>
             <br>
             <form method='POST' action=''>
@@ -95,8 +97,9 @@ class VueParticipant
 	        <input type='text' name ='editerTitre' placeholder='Titre'/>
 	        <input type='text' name ='editerDescr' placeholder='Description'/>
 	        ".//<input type='date' name ='editerDateExp' placeholder='expiration'/>
-            "<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
-	        <button type='submit'>Modifier la liste</button>
+            //<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
+            " <i>Date d'expiration</i> <input type='date' name ='editerDateExp' placeholder='Date expiration'  value='$normalExp' min='$tommorow'/>
+            <button type='submit'>Modifier la liste</button>
             </form>
             <br>
 
@@ -223,7 +226,7 @@ class VueParticipant
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
-        if((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
+        if ((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ("$i[nomReservation]" != null) {
                 $content .= "L'item est reservé par : $i[nomReservation]<br>";
             }
@@ -238,7 +241,7 @@ class VueParticipant
                 $content .= "Pas de message fournis lors de la réservation. <br>";
             }
 
-            if("$i[messageReservation]" == null && "$i[nomReservation]" == null){
+            if ("$i[messageReservation]" == null && "$i[nomReservation]" == null) {
                 $content .= "Pas de réservation. <br>";
             }
         }
@@ -260,7 +263,7 @@ class VueParticipant
         }
 
         //formulaire pour supprimer un item
-        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp){
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp) {
             $content .="<br>En guise de sécurité, pour supprimer l'item tapez ci-dessous : Je souhaite supprimer l'item
             <form method='POST' action=''>
             <input type='text' name='securiteSupprimerItem' placeholder='tapez ici'/><br>
@@ -278,17 +281,18 @@ class VueParticipant
     private function htmlListeInacessible() : string
     {
         $l = $this->tab[0];
+        $appel = $this->tab[2]; // vaut ../../ si l'appel viens d'un affichage item, vide sinon
         $content = "";
         $dateDExp = (new \DateTime("$l[expiration]"));
         $now = new \DateTime();
         $url_Accueil = $this->container->router->pathFor('Accueil');
         if ($now > $dateDExp) {
             $content .= "<h1>Cette liste est expirée</h1>
-        <img style='max-width: 500px' src='../../Ressources/img/end.jpg'></div><br>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/end.jpg'></div><br>
         ";
         } else {
-            $content .= "<h1>Cette liste n'a pas encore été rendue publique par son créateur</h1>
-        <img style='max-width: 500px' src='../../Ressources/img/soon.jpg'></div><br>
+            $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/soon.jpg'></div><br>
         ";
         }
         $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
