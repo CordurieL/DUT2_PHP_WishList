@@ -96,19 +96,17 @@ class VueParticipant
             <span>Modifier la liste: </span>
 	        <input type='text' name ='editerTitre' placeholder='Titre'/>
 	        <input type='text' name ='editerDescr' placeholder='Description'/>
-	        ".//<input type='date' name ='editerDateExp' placeholder='expiration'/>
-            //<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
-            " <i>Date d'expiration</i> <input type='date' name ='editerDateExp' placeholder='Date expiration'  value='$normalExp' min='$tommorow'/>
+	        <i>Date d'expiration</i> <input type='date' name ='editerDateExp' placeholder='Date expiration'  value='$normalExp' min='$tommorow'/>
             <button type='submit'>Modifier la liste</button>
             </form>
             <br>
 
             <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutItem'>
             <span>Ajouter un item à la liste: </span>
-            <input id='cnom' type='text' name='creanom' placeholder='nom'/>
+            <input id='cnom' type='text' name='creanom' placeholder='nom' required/>
             <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
             <input type='file' name='image' placeholder='creaimage'></td>
-            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' />
+            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' required/>
             <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
@@ -118,22 +116,23 @@ class VueParticipant
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         $content .= "<ul>";
         foreach ($item as $i) {
+            $idItem = $i['id'];
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
             /* Le token pour savoir si on est l'éditeur */
             if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && ((new \DateTime()) < $dateDExp)) {
-                $etatItem = "$i[nomReservation]";
+                /*$etatItem = "$i[nomReservation]";
                 if ($etatItem == null) {
                     $etatItem = "Pas encore réservé";
                 } else {
                     $etatItem = "Réservé";
                 }
-                $content .= "
-                <script type='text/javascript'>
+                $content .=
+                "<script type='text/javascript'>
                 function montrerReserv(obj)
                 {
-                    var reserv = document.getElementById('reservCachee');
-                    var boutonReserv = document.getElementById('reservCacheeBouton');
+                    var reserv = document.getElementById('reservCachee$idItem');
+                    var boutonReserv = document.getElementById('reservCacheeBouton$idItem');
                     if (reserv.style.display == 'none'){
                         reserv.style.display = '';
                         boutonReserv.value = 'Cacher';
@@ -142,18 +141,26 @@ class VueParticipant
                         boutonReserv.value = 'Voir';
                     }
                 }
-                </script>
-                C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réservé cet item avant le $dateDExpString<br>
-                <span>
-                Etat de la réservation : 
-                    <input id='reservCacheeBouton' type='button' value='Voir' onclick='montrerReserv(this);'>
-                        <span id='reservCachee' style='display: none;'>$etatItem</span>
-                </span>";
+                </script>*/
+                $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réservé cet item avant le $dateDExpString<br>";
+            /*<span>
+            Etat de la réservation :
+                <input id='reservCacheeBouton$idItem' type='button' value='Voir' onclick='montrerReserv(this);'>
+                    <span id='reservCachee$idItem' style='display: none;'>$etatItem</span>
+            </span>";*/
             } else {
                 if ($i['nomReservation'] == null) {
-                    $content .= "Pas encore réservé<br>";
+                    if ($i['estUneCagnotte'] == false) {
+                        $content .= "Pas encore réservé<br>";
+                    } else {
+                        $content .= "Pas encore réservé ou seulement partiellement réservé<br>";
+                    }
                 } else {
-                    $content .= "Réservé par $i[nomReservation]<br>";
+                    if ($i['estUneCagnotte'] == false) {
+                        $content .= "Réservé par $i[nomReservation]<br>";
+                    } else {
+                        $content .= "Réservé par de multiples participants<br>";
+                    }
                 }
             }
             $content .= "<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
@@ -192,15 +199,34 @@ class VueParticipant
         $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
 
-        //Affichage du formulaire si le nomReservation est null
-        if ("$i[nomReservation]"== null&& (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
-            $content .= "<form method='POST' action=''>
-        <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
-        <textarea name='messageAuCreateur' placeholder='Message au createur' maxlength=255 cols=50 rows=8></textarea><br>
-        <button type='submit'>Réserver l'item</button>
-        </form>";
+        //Transformer en cagnotte
+        if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) && ($i['nomReservation'] == null)) {
+            if ($i['estUneCagnotte'] == false) {
+                $content .= "<form method='POST' action=''>
+            <button name='rendreCagnotte' type='submit'>Transformer en cagnotte (⚠️ irréversible ⚠️)</button>
+            </form>";
+            } else {
+                $content .= "Vous avez créé une cagnotte pour cet objet.";
+            }
         }
 
+        //Affichage du formulaire si le nomReservation est null
+        if ("$i[nomReservation]"== null && (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
+            $content .= "<form method='POST' action=''>
+        <input type='text' name='nom' value='$champ' placeholder='nom'/><br>
+        <textarea name='messageAuCreateur' placeholder='Message au createur' maxlength=255 cols=50 rows=8></textarea><br>";
+            if ($i['estUneCagnotte'] == false) {
+                $content .= "<button type='submit'>Réserver l'item</button>";
+            } else {
+                $content .= "L'objet est placé sous une cagnotte, vous pouvez choisir le montant de votre participation<br>
+                Prix d'origine de l'objet : $i[tarif]€<br>Montant restant à régler : $i[tarif_restant]€<br>
+                <input type='number' name='participation' step ='0.01' min='0.01' max=$i[tarif_restant] placeholder='participation'/><br>
+                <button type='submit'>Participer à cette cagnotte</button>
+                ";
+            }
+            $content .= "</form>";
+        }
+        
         //formulaire pour ajouter une image a l'item
         $l = $this->tab[1];
         $tokenEdition = $l['token_edition'];
@@ -214,8 +240,7 @@ class VueParticipant
         <button type='submit'>Ajouter l'image</button>
         <span>
         </form>
-        <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'>
-                <br>
+        <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'><br>
         <span>Ajouter une image via un lien à cet item :</span>
         <input type='text' name='urlimage' placeholder='url_image'></td>
         <button type='submit'>Ajouter l'image</button>
@@ -226,43 +251,57 @@ class VueParticipant
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
         if ((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
-            if ("$i[nomReservation]" != null) {
-                $content .= "L'item est reservé par : $i[nomReservation]<br>";
-            }
-
-            //Message au créateur si il y a un message et un nom de reservation
-            if ("$i[messageReservation]" != null && "$i[nomReservation]" != null) {
-                $content .= "Message : ";
-                $content .= "$i[messageReservation]<br>";
-            }
-            //Message au créateur si il n'y a pas de message et un nom de reservation
-            if ("$i[messageReservation]" == null && "$i[nomReservation]" != null) {
-                $content .= "Pas de message fournis lors de la réservation. <br>";
-            }
-
-            if ("$i[messageReservation]" == null && "$i[nomReservation]" == null) {
-                $content .= "Pas de réservation. <br>";
+            if ($i['estUneCagnotte'] == 0) {
+                if ("$i[nomReservation]" != null) {
+                    $content .= "L'item est reservé par : $i[nomReservation]<br>";
+                    if ("$i[messageReservation]" != null) {
+                        //Message au créateur si il y a un message et un nom de reservation
+                        $content .= "Message : $i[messageReservation]<br>";
+                    } else {
+                        //Message au créateur si il n'y a pas de message et un nom de reservation
+                        $content .= "Pas de message fournis lors de la réservation. <br>";
+                    }
+                } else {
+                    if ("$i[messageReservation]" == null) {
+                        $content .= "Pas de réservation. <br>";
+                    }
+                }
+            } else {
+                $arrayParticipants = $this->tab[2];
+                if ($arrayParticipants == null) {
+                    $content .= "Aucune participation pour le moment. <br>";
+                } else {
+                    foreach ($arrayParticipants as $p) {
+                        $content .= "$p[nomparticipation] : $p[contribution]€<br>";
+                        if ("$p[messageparticipation]" != null) {
+                            //Message au créateur si il y a un message et un nom de reservation
+                            $content .= "Message : $p[messageparticipation]<br><br>";
+                        } else {
+                            $content .= "Pas de message fournis lors de la participation.<br><br>";
+                        }
+                    }
+                }
             }
         }
 
         //formulaire pour modifier un item qui s'affiche si il possede tokenedition + un nom de reservation null + date courante inferieur a date expiration
-        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp) {
+        if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))&&("$i[nomReservation]"== null)&&((new \DateTime()) < $dateDExp) && ($i['tarif'] == $i['tarif_restant'])) {
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédez plus le token d'édition, cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
-        <input type='number' name='tarifItem' step ='0.01' min='0' placeholder='Tarif de litem'/><br>
+        <input type='number' name='tarifItem' step ='0.01' min='0.01' placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
         }
 
-        //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom resevartion non null + date inférieur a la date dexpiration.
-        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"!= null&&(new \DateTime()) < $dateDExp) {
+        //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom reservation non null + date inférieure a la date dexpiration.
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&(("$i[nomReservation]"!= null) || ($i['tarif'] != $i['tarif_restant']))&&(new \DateTime()) < $dateDExp) {
             $content .= "Vous ne pouvez plus modifier ou supprimer cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
         }
 
         //formulaire pour supprimer un item
-        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&"$i[nomReservation]"== null&&(new \DateTime()) < $dateDExp) {
+        if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&(("$i[nomReservation]"== null) || ($i['tarif'] == $i['tarif_restant']))&&(new \DateTime()) < $dateDExp) {
             $content .="<br>En guise de sécurité, pour supprimer l'item tapez ci-dessous : Je souhaite supprimer l'item
             <form method='POST' action=''>
             <input type='text' name='securiteSupprimerItem' placeholder='tapez ici'/><br>

@@ -85,23 +85,22 @@ class AffichageController
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
                 }
                 /* Pour creer un nouvel item dans une liste */
-                if ((isset($data['creanom'])&&($this->verifierChamp($data['creanom']) != null))&&((isset($data['creadescription'])&&$this->verifierChamp($data['creadescription']) !=null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
+                if ((isset($data['creanom'])&&(($nom = $this->verifierChamp($data['creanom'])) != null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
                     $item = new \mywishlist\models\Item();
-                    $item->save();
-                    $nom = filter_var($data['creanom'], FILTER_SANITIZE_STRING);
-                    $description = filter_var($data['creadescription'], FILTER_SANITIZE_STRING);
+                    if ((isset($data['creadescription'])&&(($description = $this->verifierChamp($data['creadescription'])) !=null))) {
+                        $item->descr = $description;
+                    }
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
                     if (in_array(substr($_FILES['image']['name'], -4), $types)) {
                         $extension = substr($_FILES['image']['name'], -3);
                         move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
                     }
                     $item->img = "{$item->id}.{$extension}";
-                    $tarif = filter_var($data['creatarif'], FILTER_SANITIZE_NUMBER_FLOAT);
+                    $tarif = ($data['creatarif']);
                     $item->nom =$nom;
-                    $item->descr = $description;
                     $item->tarif = $tarif;
+                    $item->tarif_restant = $item->tarif;
                     $item->liste_id = $liste->no;
-                    $vue = new VueCreation([$liste->toArray()], $this->container) ;
                     $item->save();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
                 }
@@ -139,72 +138,49 @@ class AffichageController
         $tokenEdition = "$liste[token_edition]";
 
         $item = \mywishlist\models\Item::find($args['id']) ;
-        $liste = $item->liste;
         $tokenListe = $liste->token;
+        $dateDExp = (new \DateTime("$liste[expiration]"));
+        $data = $rq->getParsedBody();
+
+        // par défaut
+        $vue = new VueParticipant([$item->toArray(),$liste->toArray(), $item->participations->toArray()], $this->container);
+        $html = $vue->render(3);
 
         // Si la liste est publique ou qu'on est l'auteur, on peut voir son item
-        $tokenEdition = $liste->token_edition;
-        if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) || ("$liste[valide]" == 1)) {
-            if ($tokenListe === $args['token']) {
-                $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()], $this->container) ;
-                $html = $vue->render(3) ;
-            } else {
-                $vue = new \mywishlist\vue\VueParticipant([$item->toArray(),$liste->toArray()], $this->container) ;
-                $html = $vue->render(0) ; // retourne à l'accueil
-            }
+        if (((isset($_COOKIE["TokenEdition:".$tokenEdition])) || (("$liste[valide]" == 1) && ((new \DateTime('NOW')) < $dateDExp)))) {
 
-            $data = $rq->getParsedBody();
-            //$idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
-            //$item = \mywishlist\models\Item::find($idItem);
             //traitement nom reservation
             if (is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))) {
                 $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
-                $item->nomReservation = $nom;
-                $item->update();
-                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
-                setcookie(
-                    "nomReservation",
-                    $nom,
-                    time() + (100 * 365 * 24 * 60 * 60), //expire dans 100 ans
-                "/"
-                );
-            } else {
-                $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
-                $html = $vue->render(3);
-            }
-
-            $data = $rq->getParsedBody();
-            //$idItem = filter_var($data['idItem'], FILTER_SANITIZE_NUMBER_INT);
-            //$item = \mywishlist\models\Item::find($idItem);
-            //traitement nom reservation
-            if (is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifierChamp($data['nom']) != null))) {
-                $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
-                $item->nomReservation = $nom;
-                $item->update();
-                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
-                setcookie(
-                    "nomReservation",
-                    $nom,
-                    time() + (100 * 365 * 24 * 60 * 60), //expire dans 100 ans
-                "/"
-                );
-            } else {
-                $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-                $html = $vue->render(3);
-            }
-
-            //traitement message
-            if (is_null($item->messageReservation)&&isset($data['messageAuCreateur'])&&($this->verifierChamp($data['messageAuCreateur']) != null)) {
-                $contenuMessage = filter_var($data['messageAuCreateur'], FILTER_SANITIZE_STRING);
-                $messageLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuMessage)));
-                if ($contenuMessage != "" && $contenuMessage != null && $messageLength >0 && $messageLength <250) {
-                    $item->messageReservation = $contenuMessage;
+                if ($item['estUneCagnotte'] == 0) {
+                    $item->nomReservation = $nom;
+                    if (isset($data['messageAuCreateur'])&&(($contenuMessage = $this->verifierChamp($data['messageAuCreateur'])) != null)) {
+                        $item->messageReservation = $contenuMessage;
+                    }
+                    $item->tarif_restant = 0;
                     $item->update();
-                    $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                } else {
+                    $particip = new \mywishlist\models\Participation();
+                    $particip->item_id = $item->id;
+                    $particip->nomparticipation = $nom;
+                    if (isset($data['messageAuCreateur'])&&(($contenuMessage = $this->verifierChamp($data['messageAuCreateur'])) != null)) {
+                        $particip->messageparticipation = $contenuMessage;
+                    }
+                    $particip->contribution = $data['participation'];
+                    $particip->save();
+                    $item->tarif_restant = $item->tarif_restant - $particip->contribution;
+                    if ($item->tarif_restant == 0) {
+                        $item->nomReservation = "Multi-Participation";
+                    }
+                    $item->update();
                 }
-            } else {
-                $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-                $html = $vue->render(3);
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                setcookie(
+                    "nomReservation",
+                    $nom,
+                    time() + (100 * 365 * 24 * 60 * 60), //expire dans 100 ans
+                "/"
+                );
             }
 
             //ajout de l'image a l'item
@@ -218,10 +194,14 @@ class AffichageController
                     $item->img = "{$item->id}.{$extension}";
                     $item->update();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
-                } else {
-                    $vue = new VueParticipant([$item->toArray() ,$liste->toArray()], $this->container);
-                    $html = $vue->render(3);
                 }
+            }
+
+            /* Pour devenir une cagnotte */
+            if ((isset($data['rendreCagnotte']))) {
+                $item->estUneCagnotte = true;
+                $item->save();
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
 
             //ajout de l'image a l'item
@@ -233,10 +213,7 @@ class AffichageController
                 }
                 $item->img = "{$item->id}.{$extension}";
                 $item->update();
-                $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-            } else {
-                $vue = new VueParticipant([$item->toArray(),$liste->toArray()], $this->container);
-                $html = $vue->render(3);
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
 
             //modifier un item
@@ -246,6 +223,7 @@ class AffichageController
                 }
                 if (($nouveauTarifItem = $this->verifierChamp($data['tarifItem'])) != null) {
                     $item->tarif = $nouveauTarifItem;
+                    $item->tarif_restant = $item->tarif;
                 }
                 if (($nouveauDescriItem = $this->verifierChamp($data['descriItem'])) != null) {
                     $item->descr = $nouveauDescriItem;
@@ -253,18 +231,18 @@ class AffichageController
                 $item->update();
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
+
+            // supprime item
+            if (isset($data['securiteSupprimerItem'])&&($this->verifierChamp($data['securiteSupprimerItem']) != null)) {
+                if ($data['securiteSupprimerItem'] == "Je souhaite supprimer l'item") {
+                    $item->delete();
+                    $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+                }
+            }
         } else {
             $vue = new VueParticipant([$liste->toArray(),$item->toArray(), "../../"], $this->container);
             $html = $vue->render(4);
         }
-
-        if (isset($data['securiteSupprimerItem'])&&($this->verifierChamp($data['securiteSupprimerItem']) != null)) {
-            if ($data['securiteSupprimerItem'] == "Je souhaite supprimer l'item") {
-                $item->delete();
-                $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
-            }
-        }
-
 
         $rs->getBody()->write($html);
         return $rs;
