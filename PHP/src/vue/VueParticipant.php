@@ -88,6 +88,8 @@ class VueParticipant
                 <button name='publicationButton' type='submit'>Rendre la liste publique</button>
                 </form>";
             }
+            $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
+            $normalExp = (new \DateTime($l['expiration']))->format('Y-m-d');
             $content .="</div>
             <br>
             <form method='POST' action=''>
@@ -95,8 +97,9 @@ class VueParticipant
 	        <input type='text' name ='editerTitre' placeholder='Titre'/>
 	        <input type='text' name ='editerDescr' placeholder='Description'/>
 	        ".//<input type='date' name ='editerDateExp' placeholder='expiration'/>
-            "<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
-	        <button type='submit'>Modifier la liste</button>
+            //<input type='text' name ='editerDateExp' placeholder='Date expiration' onfocus=(this.type='date') onblur=(this.type='text')/>
+            " <i>Date d'expiration</i> <input type='date' name ='editerDateExp' placeholder='Date expiration'  value='$normalExp' min='$tommorow'/>
+            <button type='submit'>Modifier la liste</button>
             </form>
             <br>
 
