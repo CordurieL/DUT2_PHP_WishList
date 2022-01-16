@@ -214,17 +214,21 @@ class VueParticipant
         $content .= "</ul><hr style='border-top: 5px solid black;'>";
         if((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ("$i[nomReservation]" != null) {
-                $content .= "L'item est reservé par : $i[nomReservation]<br><br>";
+                $content .= "L'item est reservé par : $i[nomReservation]<br>";
             }
 
             //Message au créateur si il y a un message et un nom de reservation
             if ("$i[messageReservation]" != null && "$i[nomReservation]" != null) {
-                $content .= "Message : <br>";
+                $content .= "Message : ";
                 $content .= "$i[messageReservation]<br>";
             }
             //Message au créateur si il n'y a pas de message et un nom de reservation
             if ("$i[messageReservation]" == null && "$i[nomReservation]" != null) {
                 $content .= "Pas de message fournis lors de la réservation. <br>";
+            }
+
+            if("$i[messageReservation]" == null && "$i[nomReservation]" == null){
+                $content .= "Pas de réservation. <br>";
             }
         }
 
