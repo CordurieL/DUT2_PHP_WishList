@@ -147,7 +147,11 @@ class VueParticipant
                         <span id='reservCachee' style='display: none;'>$etatItem</span>
                 </span>";
             } else {
-                $content .= "Etat de la réservation visible mais à ajouter en BDD<br>";
+                if ($i['nomReservation'] == null) {
+                    $content .= "Pas encore réservé<br>";
+                } else {
+                    $content .= "Réservé par $i[nomReservation]<br>";
+                }
             }
             $content .= "<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
