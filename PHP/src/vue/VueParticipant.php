@@ -229,7 +229,7 @@ class VueParticipant
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédé plus le token d'édition cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
-         <input type='number' name='tarifItem'  placeholder='Tarif de litem'/><br>
+         <input type='text' name='tarifItem'  placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
