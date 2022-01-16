@@ -207,7 +207,7 @@ class AffichageController
                 $item->descr = $nouveauDescriItem;
             }
             $item->update();
-            $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
+            $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
         }
 
         $rs->getBody()->write($html);
