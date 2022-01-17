@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace mywishlist\vue;
 
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
 class VueParticipant
 {
     public array $tab;
@@ -372,10 +374,17 @@ class VueParticipant
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
+        $root = SCRIPT_ROOT;
 
         $html = <<<END
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
+    <html lang="fr">
+    <head>
+    <title>My WishList</title>
+    <meta charset="utf-8"/>
+    <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
+    </head>
     <body>
     <h1>My WishList</h1>
     <nav>

@@ -2,6 +2,8 @@
 
 namespace mywishlist\vue;
 
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
 class VueCreation
 {
     public array $tab;
@@ -87,8 +89,14 @@ class VueCreation
         $url_inscription = $this->container->router->pathFor('inscription');
 
         $html = <<<END
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
+    <html lang="fr">
+    <head>
+    <title>My WishList</title>
+    <meta charset="utf-8"/>
+    <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>    
+    </head>
     <body>
     <h1>My WishList</h1>
     <nav>
