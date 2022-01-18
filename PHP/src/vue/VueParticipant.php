@@ -199,7 +199,7 @@ class VueParticipant
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
-        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href=$i[url]></a> <br>
+        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
 
         //Transformer en cagnotte
