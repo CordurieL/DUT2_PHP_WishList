@@ -109,6 +109,7 @@ class VueParticipant
             <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
             <input type='file' name='image' placeholder='creaimage'></td>
             <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' required/>
+            <input type='url' name='creaurl' placeholder='url'/>
             <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
@@ -198,7 +199,7 @@ class VueParticipant
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
-        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> $i[url] <br>
+        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href=$i[url]></a> <br>
         <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
 
         //Transformer en cagnotte
@@ -234,23 +235,22 @@ class VueParticipant
         $tokenEdition = $l['token_edition'];
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
-        <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
-        <br>
-        <span>
-        <span>Ajouter une image de l'ordinateur à cet item :</span>
-        <input type='file' name='image' placeholder='creaimage'></td>
-        <button type='submit'>Ajouter l'image</button>
-        <span>
+            <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
+            <br>
+                <span>
+                    <span>Ajouter une image de l'ordinateur à cet item :</span>
+                    <input type='file' name='image' placeholder='creaimage'></td>
+                    <button type='submit'>Ajouter l'image</button>
+                <span>
+            </form>
 
-        </form>
-
-        <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'><br>
-        <br>
-        <span>Ajouter une image via un lien à cet item :</span>
-        <input type='text' name='urlimage' placeholder='url_image'></td>
-        <button type='submit' name='linkimage'>Ajouter l'image</button>
-        <span>
-        </form>";
+            <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'><br>
+            <br>
+                <span>Ajouter une image via un lien à cet item :</span>
+                    <input type='text' name='urlimage' placeholder='url_image'></td>
+                    <button type='submit' name='linkimage'>Ajouter l'image</button>
+                <span>
+            </form>";
         }
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
@@ -296,6 +296,7 @@ class VueParticipant
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
         <input type='number' name='tarifItem' step ='0.01' min='0.01' placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
+        <input type='url' name='urlItem' placeholder='url'/><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
         }
