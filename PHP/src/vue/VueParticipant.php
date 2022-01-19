@@ -296,7 +296,7 @@ class VueParticipant
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
         <input type='number' name='tarifItem' step ='0.01' min='0.01' placeholder='Tarif de litem'/><br>
         <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
-        <input type='url' name='urlItem' placeholder='url'/><br>
+        <input type='url' name='modifurlItem' placeholder='url'/><br>
         <button type='submit'>Modifier l'item</button>
         </form>";
         }
