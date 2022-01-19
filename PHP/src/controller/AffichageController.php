@@ -30,6 +30,19 @@ class AffichageController
         return $res;
     }
 
+     public static function verifierUrl(mixed $chaine) :string|null
+        {
+            $res = null;
+            if (is_string($chaine)) {
+                $contenuChamp = filter_var($chaine, FILTER_SANITIZE_URL);
+                $contenuLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuChamp)));
+                if ($contenuChamp != "" && $contenuChamp != null && $contenuLength >0) {
+                    $res = $contenuChamp;
+                }
+            }
+            return $res;
+        }
+
     public function afficherAccueil(Request $rq, Response $rs, $args):Response
     {
         $listes = \mywishlist\models\Liste::all() ;
@@ -100,6 +113,8 @@ class AffichageController
                     $item->nom =$nom;
                     $item->tarif = $tarif;
                     $item->tarif_restant = $item->tarif;
+                    $url = filter_var($data['creaurl'], FILTER_SANITIZE_URL);
+                    $item->url = $url;
                     $item->liste_id = $liste->no;
                     $item->save();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
@@ -199,21 +214,28 @@ class AffichageController
 
             //ajout de l'image a l'item via un lien
             if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
-
                 if(isset($_POST['urlimage'])){
-
-                    $url = $_POST['urlimage'];
+                    $url = $data['urlimage'];
                     $data = file_get_contents($url);
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
                     if (in_array(substr($url, -4), $types)) {
-                        echo "<img src='../Ressources/url_img/{$url}'>";
 
+                        file_put_contents("../Ressources/img", $data);
                         $item->img = $url;
                     }
-                        $item->update();
-                        $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                    $item->update();
+                    $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
                 }
 
+            }
+
+            //supprime l'image d'un item
+            if ($item->img != null) {
+                 if ($data['securiteSupprimerImage'] == "supprimer") {
+                    $item->img = NULL;
+                    $item->update();
+                    $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                }
             }
 
             /* Pour devenir une cagnotte */
@@ -224,7 +246,7 @@ class AffichageController
             }
 
             //modifier un item
-            if (isset($data['nomItem'])&&($this->verifierChamp($data['nomItem']) != null)||isset($data['tarifItem'])&&($this->verifierChamp($data['tarifItem']) != null)||isset($data['descriItem'])&&($this->verifierChamp($data['descriItem']) != null)) {
+            if (isset($data['nomItem'])&&($this->verifierChamp($data['nomItem']) != null)||isset($data['tarifItem'])&&($this->verifierChamp($data['tarifItem']) != null)||isset($data['descriItem'])&&($this->verifierChamp($data['descriItem']) != null) || isset($data['modifurlItem'])&&($this->verifierUrl($data['modifurlItem']) != null) ) {
                 if (($nouveauNomItem = $this->verifierChamp($data['nomItem'])) != null) {
                     $item->nom = $nouveauNomItem;
                 }
@@ -234,6 +256,9 @@ class AffichageController
                 }
                 if (($nouveauDescriItem = $this->verifierChamp($data['descriItem'])) != null) {
                     $item->descr = $nouveauDescriItem;
+                }
+                if (($nouveauUrlItem = $this->verifierUrl($data['modifurlItem'])) != null) {
+                    $item->url = $nouveauUrlItem;
                 }
                 $item->update();
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
