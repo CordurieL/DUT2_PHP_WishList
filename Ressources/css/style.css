@@ -1,3 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600&family=Roboto:wght@200;500&display=swap");
+
 html {
-  background-color: #101010;
+  background-color: #800000;
+  color: aliceblue;
+  font-family: "Roboto", serif;
+}
+
+#NavigationPrincipale {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  color: aqua;
+  justify-content: space-around;
 }

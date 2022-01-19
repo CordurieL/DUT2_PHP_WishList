@@ -99,7 +99,7 @@ class VueCreation
     </head>
     <body>
     <h1>My WishList</h1>
-    <nav>
+    <nav id='NavigationPrincipale'>
     <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Listes publiques</a></div>

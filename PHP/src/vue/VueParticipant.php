@@ -376,6 +376,8 @@ class VueParticipant
         $url_inscription = $this->container->router->pathFor('inscription');
         $root = SCRIPT_ROOT;
 
+        echo "$root../Ressources/css/style.css";
+
         $html = <<<END
     <!DOCTYPE html>
     <html>
@@ -387,7 +389,7 @@ class VueParticipant
     </head>
     <body>
     <h1>My WishList</h1>
-    <nav>
+    <nav id='NavigationPrincipale'>
     <div><a href=$url_Accueil>Accueil</a></div>
     <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
     <div><a href=$url_listes>Listes publiques</a></div>
