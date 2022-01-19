@@ -219,9 +219,10 @@ class AffichageController
                     $data = file_get_contents($url);
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
                     if (in_array(substr($url, -4), $types)) {
-
-                        file_put_contents("../Ressources/img", $data);
-                        $item->img = $url;
+                        $extension = substr($url, -3);
+                        $file = "../Ressources/img/{$item->id}.{$extension}";
+                        file_put_contents($file, $data);
+                        $item->img = "{$item->id}.{$extension}";
                     }
                     $item->update();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
@@ -230,13 +231,12 @@ class AffichageController
             }
 
             //supprime l'image d'un item
-            if ($item->img != null) {
-                 if ($data['securiteSupprimerImage'] == "supprimer") {
-                    $item->img = NULL;
-                    $item->update();
-                    $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
-                }
+            if ($data['securiteSupprimerImage'] == "supprimer") {
+                 $item->img = NULL;
+                 $item->update();
+                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
+
 
             /* Pour devenir une cagnotte */
             if ((isset($data['rendreCagnotte']))) {
