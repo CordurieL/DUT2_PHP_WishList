@@ -199,8 +199,15 @@ class VueParticipant
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
-        $content .= "<div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br>
-        <img style='max-width: 200px' src='../../../../Ressources/img/$i[img]'></div><br>";
+        $content .= "
+        <script>
+              function hideImg() {
+                document.getElementById('HideImg')
+                   .style.display = 'none';
+               }
+        </script>
+        <div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br>
+        <img id=HideImg style='max-width: 200px' src='../../../../Ressources/img/$i[img]' onerror='hideImg()'></div><br>";
 
         //Transformer en cagnotte
         if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) && ($i['nomReservation'] == null)) {
@@ -241,7 +248,7 @@ class VueParticipant
                     <span>Ajouter une image de l'ordinateur à cet item :</span>
                     <input type='file' name='image' placeholder='creaimage'></td>
                     <button type='submit'>Ajouter l'image</button>
-                <span>
+                </span>
             </form>
 
             <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'><br>
@@ -249,8 +256,19 @@ class VueParticipant
                 <span>Ajouter une image via un lien à cet item :</span>
                     <input type='text' name='urlimage' placeholder='url_image'></td>
                     <button type='submit' name='linkimage'>Ajouter l'image</button>
-                <span>
+                </span>
+            </form>
+
+            <form enctype='multipart/form-data' method='POST' action='' id='FormSupprImageItem'><br>
+            <br>
+            <span>
+                <span>Entrez 'supprimer' pour effacer l'image </span>
+                <input type='text' name='securiteSupprimerImage' placeholder='tapez ici '/>
+                <button type='submit' name='supprimage'>X Supprimer l'image X</button>
+            </span>
             </form>";
+
+
         }
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi

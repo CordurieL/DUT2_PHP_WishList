@@ -229,6 +229,15 @@ class AffichageController
 
             }
 
+            //supprime l'image d'un item
+            if ($item->img != null) {
+                 if ($data['securiteSupprimerImage'] == "supprimer") {
+                    $item->img = NULL;
+                    $item->update();
+                    $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                }
+            }
+
             /* Pour devenir une cagnotte */
             if ((isset($data['rendreCagnotte']))) {
                 $item->estUneCagnotte = true;
