@@ -108,7 +108,7 @@ class VueParticipant
             <div>Ajouter un item à la liste: </div>
             <input id='cnom' type='text' name='creanom' placeholder='nom' required/>
             <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
-            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' required/>
+            <input id='crtar' type='number'  style='width: 6em' name='creatarif' placeholder='tarif' step='0.01' min='0'  required/>
             <input type='url' name='creaurl' placeholder='url'/>
 
                 <span>| image(.jpg, .png ou .gif):</span>
