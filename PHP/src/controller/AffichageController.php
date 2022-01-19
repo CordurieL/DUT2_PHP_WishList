@@ -98,22 +98,35 @@ class AffichageController
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
                 }
                 /* Pour creer un nouvel item dans une liste */
-                if ((isset($data['creanom'])&&(($nom = $this->verifierChamp($data['creanom'])) != null))&&((isset($data['creatarif'])&&$this->verifierChamp($data['creatarif'])!=null))) {
+                if ((isset($data['creanom'])&&(($nom = $this->verifierChamp($data['creanom'])) != null))&&((isset($data['creatarif'])&& ($this->verifierChamp($data['creatarif']))!=null))) {
                     $item = new \mywishlist\models\Item();
                     if ((isset($data['creadescription'])&&(($description = $this->verifierChamp($data['creadescription'])) !=null))) {
                         $item->descr = $description;
                     }
+                    //image avec fichier
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
-                    if (in_array(substr($_FILES['image']['name'], -4), $types)) {
-                        $extension = substr($_FILES['image']['name'], -3);
-                        move_uploaded_file($_FILES['image']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+                    if (in_array(substr($_FILES['creaimage']['name'], -4), $types)) {
+                        $extension = substr($_FILES['creaimage']['name'], -3);
+                        move_uploaded_file($_FILES['creaimage']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+                        $item->img = "{$item->id}.{$extension}";
                     }
-                    $item->img = "{$item->id}.{$extension}";
-                    $tarif = ($data['creatarif']);
+                    //image avec lien
+                    if(isset($_POST['creaurlimage'])){
+                        $url = $data['creaurlimage'];
+                        if (in_array(substr($url, -4), $types)) {
+                            $data = file_get_contents($url);
+                            $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
+                            $extension = substr($url, -3);
+                            $file = "../Ressources/img/{$item->id}.{$extension}";
+                            file_put_contents($file, $data);
+                            $item->img = "{$item->id}.{$extension}";
+                        }
+                    }
+                    $tariif = $_POST['creatarif'];
                     $item->nom =$nom;
-                    $item->tarif = $tarif;
+                    $item->tarif = $tariif;
                     $item->tarif_restant = $item->tarif;
-                    $url = filter_var($data['creaurl'], FILTER_SANITIZE_URL);
+                    $url = filter_var($_POST['creaurl'], FILTER_SANITIZE_URL);
                     $item->url = $url;
                     $item->liste_id = $liste->no;
                     $item->save();
@@ -231,7 +244,7 @@ class AffichageController
             }
 
             //supprime l'image d'un item
-            if ($data['securiteSupprimerImage'] == "supprimer") {
+            if (isset($_POST['supprimage'])){
                  $item->img = NULL;
                  $item->update();
                  $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
