@@ -95,21 +95,28 @@ class VueParticipant
             $content .="</div>
             <br>
             <form method='POST' action=''>
-            <span>Modifier la liste: </span>
+            <div>Modifier la liste: </div>
 	        <input type='text' name ='editerTitre' placeholder='Titre'/>
 	        <input type='text' name ='editerDescr' placeholder='Description'/>
 	        <i>Date d'expiration</i> <input type='date' name ='editerDateExp' placeholder='Date expiration'  value='$normalExp' min='$tommorow'/>
             <button type='submit'>Modifier la liste</button>
             </form>
             <br>
+            <br>
 
             <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutItem'>
-            <span>Ajouter un item à la liste: </span>
+            <div>Ajouter un item à la liste: </div>
             <input id='cnom' type='text' name='creanom' placeholder='nom' required/>
             <input id='cdesc' type='text' name='creadescription' placeholder='description'/>
-            <input type='file' name='image' placeholder='creaimage'></td>
-            <input id='crtar' type='number' name='creatarif' placeholder='tarif' step='0.01' min='0' required/>
+            <input id='crtar' type='number'  style='width: 6em' name='creatarif' placeholder='tarif' step='0.01' min='0'  required/>
             <input type='url' name='creaurl' placeholder='url'/>
+
+                <span>| image(.jpg, .png ou .gif):</span>
+                    <input type='file' name='creaimage' placeholder='creaimage'></td>
+                    <span>ou </span>
+                    <input type='url' name='creaurlimage' placeholder='url_image'></td>
+
+
             <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
@@ -245,7 +252,7 @@ class VueParticipant
             <form enctype='multipart/form-data' method='POST' action='' id='FormAjoutImageItem'>
             <br>
                 <span>
-                    <span>Ajouter une image de l'ordinateur à cet item :</span>
+                    <span>Ajouter une image de l'ordinateur à cet item (.jpg, .png ou .gif):</span>
                     <input type='file' name='image' placeholder='creaimage'></td>
                     <button type='submit'>Ajouter l'image</button>
                 </span>
@@ -253,8 +260,8 @@ class VueParticipant
 
             <form enctype='multipart/form-data' method='POST' action='' id='FormLinkImageItem'><br>
             <br>
-                <span>Ajouter une image via un lien à cet item :</span>
-                    <input type='text' name='urlimage' placeholder='url_image'></td>
+                <span>Ajouter une image via un lien à cet item (.jpg, .png ou .gif):</span>
+                    <input type='url' name='urlimage' placeholder='url_image' required></td>
                     <button type='submit' name='linkimage'>Ajouter l'image</button>
                 </span>
             </form>
@@ -262,8 +269,6 @@ class VueParticipant
             <form enctype='multipart/form-data' method='POST' action='' id='FormSupprImageItem'><br>
             <br>
             <span>
-                <span>Entrez 'supprimer' pour effacer l'image </span>
-                <input type='text' name='securiteSupprimerImage' placeholder='tapez ici '/>
                 <button type='submit' name='supprimage'>X Supprimer l'image X</button>
             </span>
             </form>";
