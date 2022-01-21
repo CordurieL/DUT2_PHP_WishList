@@ -201,8 +201,9 @@ class VueParticipant
 
         $tokenEdition = "$l[token_edition]";
         $dateDExp = (new \DateTime("$l[expiration]"));
+        $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
 
-        $content = "</ul><hr>";
+        $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">Retour à la liste</button>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
@@ -245,7 +246,6 @@ class VueParticipant
         }
         
         //formulaire pour ajouter une image a l'item
-        $l = $this->tab[1];
         $tokenEdition = $l['token_edition'];
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
