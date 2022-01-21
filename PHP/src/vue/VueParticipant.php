@@ -169,7 +169,7 @@ class VueParticipant
             $content .= "<br><img style='max-width: 200px' src='../../Ressources/img/$i[img]'></div><br>";
         }
         /* Pour les messages dans les listes */
-        $content .= "</ul><hr style='border-top: 10px solid black;'>";
+        $content .= "</ul><hr>";
         $content .= "<form method='POST' action=''>
 	        <textarea name ='contenu' placeholder='Message' maxlength=255 cols=50 rows=8></textarea><br>
 	        <button type='submit'>Publier le message</button>
@@ -195,7 +195,7 @@ class VueParticipant
         $tokenEdition = "$l[token_edition]";
         $dateDExp = (new \DateTime("$l[expiration]"));
 
-        $content = "</ul><hr style='border-top: 5px solid black;'>";
+        $content = "</ul><hr>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         }
@@ -267,12 +267,10 @@ class VueParticipant
                 <button type='submit' name='supprimage'>X Supprimer l'image X</button>
             </span>
             </form>";
-
-
         }
 
         //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
-        $content .= "</ul><hr style='border-top: 5px solid black;'>";
+        $content .= "</ul><hr>";
         if ((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ($i['estUneCagnotte'] == 0) {
                 if ("$i[nomReservation]" != null) {
@@ -350,14 +348,14 @@ class VueParticipant
         $url_Accueil = $this->container->router->pathFor('Accueil');
         if ($now > $dateDExp) {
             $content .= "<h1>Cette liste est expirée</h1>
-        <img style='max-width: 500px' src='$appel../../Ressources/img/end.jpg'></div><br>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/end.jpg'>
         ";
         } else {
             $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
-        <img style='max-width: 500px' src='$appel../../Ressources/img/soon.jpg'></div><br>
+        <img style='max-width: 500px' src='$appel../../Ressources/img/soon.jpg'>
         ";
         }
-        $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
+        $content .= "<a href=$url_Accueil>Retour à l'accueil</a></div>";
         return "<section>$content</section>";
     }
 
@@ -395,30 +393,30 @@ class VueParticipant
         $url_inscription = $this->container->router->pathFor('inscription');
         $root = SCRIPT_ROOT;
 
-        echo "$root../Ressources/css/style.css";
-
         $html = <<<END
     <!DOCTYPE html>
-    <html>
     <html lang="fr">
     <head>
-    <title>My WishList</title>
-    <meta charset="utf-8"/>
-    <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
+        <title>My WishList</title>
+        <meta charset="utf-8"/>
+        <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
     </head>
     <body>
-    <h1>My WishList</h1>
-    <nav id='NavigationPrincipale'>
-    <div><a href=$url_Accueil>Accueil</a></div>
-    <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
-    <div><a href=$url_listes>Listes publiques</a></div>
-    <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
-    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
-    </nav>
-        <br>
-        <div class="content">
-        $content
+        <div id='mainDiv'>
+            <div class='upperScreen'>
+                <p><h1>My WishList</h1></p>
+            </div>
+            <nav id='NavigationPrincipale' class='leftScreen'>
+                <button class='navigation' onclick="window.location.href='$url_Accueil'">Accueil</button>
+                <button class='navigation' onclick="window.location.href='$url_affichageForm'">Créer une nouvelle liste</button>
+                <button class='navigation' onclick="window.location.href='$url_listes'">Listes publiques</button>
+                <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
+            </nav>
+            <div class="content">
+                $content
+            </div>
         </div>
     </body>
 </html>

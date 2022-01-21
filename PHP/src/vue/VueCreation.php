@@ -87,29 +87,32 @@ class VueCreation
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
+        $root = SCRIPT_ROOT;
 
         $html = <<<END
     <!DOCTYPE html>
-    <html>
     <html lang="fr">
     <head>
-    <title>My WishList</title>
-    <meta charset="utf-8"/>
-    <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>    
+        <title>My WishList</title>
+        <meta charset="utf-8"/>
+        <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
     </head>
     <body>
-    <h1>My WishList</h1>
-    <nav id='NavigationPrincipale'>
-    <div><a href=$url_Accueil>Accueil</a></div>
-    <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
-    <div><a href=$url_listes>Listes publiques</a></div>
-    <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
-    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
-    </nav>
-        <br>
-        <div class="content">
-        $content
+        <div id='mainDiv'>
+            <div class='upperScreen'>
+                <p><h1>My WishList</h1></p>
+            </div>
+            <nav id='NavigationPrincipale' class='leftScreen'>
+                <button class='navigation' onclick="window.location.href='$url_Accueil'">Accueil</button>
+                <button class='navigation' onclick="window.location.href='$url_affichageForm'">Créer une nouvelle liste</button>
+                <button class='navigation' onclick="window.location.href='$url_listes'">Listes publiques</button>
+                <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
+            </nav>
+            <div class="content">
+                $content
+            </div>
         </div>
     </body>
 </html>
