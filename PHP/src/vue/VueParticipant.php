@@ -3,26 +3,31 @@ declare(strict_types=1);
 
 namespace mywishlist\vue;
 
-define('SCRIPT_ROOT', 'http://localhost/projphp/PHPWishList/PHP/');
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
+use \Slim\Container;
 
 class VueParticipant
 {
     public array $tab;
-    public \Slim\Container $container;
+    public Container $container;
 
-    public function __construct(array $tab, \Slim\Container $container)
+    // Constructeur
+    public function __construct(array $tab, Container $container)
     {
         $this->tab = $tab;
         $this->container = $container;
     }
 
+    // Affiche l'accueil
     private function htmlAccueil() : string
     {
+        // Bienvenue et votre pseudo si vous etes connecte
         $content = "Bienvenue à l'accueil";
         if (isset($_SESSION['pseudo'])) {
             $content = $content . ' ' . $_SESSION['pseudo'];
         }
-
+        // Vos listes crees
         $content .= "<br><h1>Vos créations :</h1>";
         $listesCrea = $this->tab[1];
         usort($listesCrea, function ($l1, $l2) {
@@ -40,7 +45,7 @@ class VueParticipant
             $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
             $content .= "<a href=$url><article class='homeCrea'><h3>$l[titre] : <span>$etatliste</span></h3></article></a>";
         }
-
+        // Les listes que vous avez vu mais pas crees (pas expirees)
         $content .= "<hr><h1>Les listes que vous avez consultées et dont vous n'êtes pas l'auteur :</h1>";
         $listes = $this->tab[0];
         usort($listes, function ($l1, $l2) {
@@ -62,6 +67,7 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
+    // Affiche les listes publiques et non expirees
     private function htmlListes() : string
     {
         $content = "<h1>Listes publiques :</h1>";
@@ -81,14 +87,17 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
+    // Affiche une liste
     private function htmlUneListe() : string
     {
+        // Infos generales
         $l = $this->tab[0];
         $dateDExp = (new \DateTime("$l[expiration]"));
         $dateDExpString = $dateDExp->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
-        $content = "";
 
+        $content = "";
+        // Vous etes le proprietaire
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
             <script type='text/javascript'>
@@ -162,6 +171,7 @@ class VueParticipant
             </form>
             <br>";
         } else {
+            // vous n'etes pas le proprietaire
             setcookie(
                 "TokenAcces:".$l['token'],
                 $l['token'],
@@ -169,43 +179,18 @@ class VueParticipant
                 "/"
             );
         }
+        // vous etes ou n'etes pas le proprietaire
         $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $dateDExpString<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
         $item = $this->tab[1];
         $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+        // On affiche les items de la liste
         $content .= "<ul>";
         foreach ($item as $i) {
             $idItem = $i['id'];
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
-            /* Le token pour savoir si on est l'éditeur */
             if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && ((new \DateTime()) < $dateDExp)) {
-                /*$etatItem = "$i[nomReservation]";
-                if ($etatItem == null) {
-                    $etatItem = "Pas encore réservé";
-                } else {
-                    $etatItem = "Réservé";
-                }
-                $content .=
-                "<script type='text/javascript'>
-                function montrerReserv(obj)
-                {
-                    var reserv = document.getElementById('reservCachee$idItem');
-                    var boutonReserv = document.getElementById('reservCacheeBouton$idItem');
-                    if (reserv.style.display == 'none'){
-                        reserv.style.display = '';
-                        boutonReserv.value = 'Cacher';
-                    }else{
-                        reserv.style.display = 'none';
-                        boutonReserv.value = 'Voir';
-                    }
-                }
-                </script>*/
                 $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réservé cet item avant le $dateDExpString<br>";
-            /*<span>
-            Etat de la réservation :
-                <input id='reservCacheeBouton$idItem' type='button' value='Voir' onclick='montrerReserv(this);'>
-                    <span id='reservCachee$idItem' style='display: none;'>$etatItem</span>
-            </span>";*/
             } else {
                 if ($i['nomReservation'] == null) {
                     if ($i['estUneCagnotte'] == false) {
@@ -236,27 +221,41 @@ class VueParticipant
         return "<section>$content</section>";
     }
     
+    // Affiche un item
     private function htmlUnItem() : string
     {
-        //Récupération du cookie
+        //Recuperation du cookie nom
         $champ = "";
         if (isset($_COOKIE["nomReservation"])) {
             $champ .= $_COOKIE["nomReservation"];
         }
-        //Affichage de l'item
+
+        // Infos generales
         $i = $this->tab[0];
         $l = $this->tab[1];
-
         $tokenEdition = "$l[token_edition]";
         $dateDExp = (new \DateTime("$l[expiration]"));
         $dateDExpString = $dateDExp->format('d-m-Y');
-
         $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         
+        // Retour a la liste
         $content = "<button id='boutonRetourListe' class='bout' onclick=\"window.location.href='$cette_liste'\">← Retour à la liste</button><br>";
+
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
+            //Vous etes l'auteur de la liste qui contient l'item
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] <br>";
+            //Transformer en cagnotte
+            if ($i['nomReservation'] == null) {
+                if ($i['estUneCagnotte'] == false) {
+                    $content .= "<form method='POST' action=''>
+            <button name='rendreCagnotte' type='submit'>Transformer en cagnotte (⚠️ irréversible ⚠️)</button>
+            </form>";
+                } else {
+                    $content .= "Vous avez créé une cagnotte pour cet objet.";
+                }
+            }
         } else {
+            // vous n'etes pas l'auteur de la liste qui contient l'item
             setcookie(
                 "TokenAcces:".$l['token'],
                 $l['token'],
@@ -264,6 +263,9 @@ class VueParticipant
                 "/"
             );
         }
+
+        // S'affiche pour tous
+        // Affiche les informations et cache l'icon image manquante s'il n'y a pas d'image
         $content .= "
         <script>
               function hideImg() {
@@ -273,17 +275,6 @@ class VueParticipant
         </script>
         <div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> Prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br></div>
         <div>Image:<br><img id=HideImg style='max-width: 200px' src='../../../../Ressources/img/$i[img]' onerror='hideImg()'></div><br>";
-
-        //Transformer en cagnotte
-        if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) && ($i['nomReservation'] == null)) {
-            if ($i['estUneCagnotte'] == false) {
-                $content .= "<form method='POST' action=''>
-            <button name='rendreCagnotte' type='submit'>Transformer en cagnotte (⚠️ irréversible ⚠️)</button>
-            </form>";
-            } else {
-                $content .= "Vous avez créé une cagnotte pour cet objet.";
-            }
-        }
 
         //Affichage du formulaire si le nomReservation est null
         if ("$i[nomReservation]"== null && (!isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
@@ -331,10 +322,12 @@ class VueParticipant
             </form>";
         }
 
-        //Marque qui a réservé l'item : cela d'affiche seulement a ceux qui ont pas le token d'édition si il a le token d'edition doivent attendre que la date courante soit supérieur a la date d'esxpi
+        //Marque qui a reserve l'item : cela s'affiche seulement a ceux qui n'ont pas le token d'edition.
+        // Celui qui a le token d'edition doit attendre que la date courante soit supérieur a la date d'expiration
         $content .= "</ul><hr>";
         if ((!isset($_COOKIE["TokenEdition:".$tokenEdition]))||(new \DateTime()) > $dateDExp) {
             if ($i['estUneCagnotte'] == 0) {
+                // Ce n'est pas une cagnotte
                 if ("$i[nomReservation]" != null) {
                     $content .= "L'item est reservé par : $i[nomReservation]<br>";
                     if ("$i[messageReservation]" != null) {
@@ -350,6 +343,7 @@ class VueParticipant
                     }
                 }
             } else {
+                // C'est une cagnotte
                 $arrayParticipants = $this->tab[2];
                 if ($arrayParticipants == null) {
                     $content .= "Aucune participation pour le moment. <br>";
@@ -367,7 +361,7 @@ class VueParticipant
             }
         }
 
-        //formulaire pour modifier un item qui s'affiche si il possede tokenedition + un nom de reservation null + date courante inferieur a date expiration
+        // Modifier les informations de l'item
         if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))&&("$i[nomReservation]"== null)&&((new \DateTime()) < $dateDExp) && ($i['tarif'] == $i['tarif_restant'])) {
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédez plus le token d'édition, cette action deviendra impossible)
         <form method='POST' action=''>
@@ -380,7 +374,6 @@ class VueParticipant
         </form>";
         }
 
-        //si l'item est réservé cela affiche (pas qui ni le msg) ce msg au lieu du formulaire de modif si possède token edition + nom reservation non null + date inférieure a la date dexpiration.
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&(("$i[nomReservation]"!= null) || ($i['tarif'] != $i['tarif_restant']))&&(new \DateTime()) < $dateDExp) {
             $content .= "Vous ne pouvez plus modifier ou supprimer cet item car il est réservé, vous devez attendre la fin de la date d'expiration de votre liste pour voir qui a réservé l'item et le message laissé.";
         }
@@ -397,15 +390,11 @@ class VueParticipant
         return "<section>$content</section>";
     }
 
-
-
-
-
-
+    // Page qui s'affiche lorsque la liste ou l'item est inacessible, parce qu'elle est expiree ou pas encore publique
     private function htmlListeInacessible() : string
     {
         $l = $this->tab[0];
-        $appel = $this->tab[2]; // vaut ../../ si l'appel viens d'un affichage item, vide sinon
+        $appel = $this->tab[2]; // vaut ../../ si l'appel viens d'un affichage item, vide sinon (pour le path)
         $content = "";
         $dateDExp = (new \DateTime("$l[expiration]"));
         $dateDExpString = $dateDExp->format('d-m-Y');
@@ -429,7 +418,6 @@ class VueParticipant
         $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
         return "<section>$content</section>";
     }
-
 
     public function render($selecteur)
     {
@@ -458,8 +446,6 @@ class VueParticipant
 
         $url_Accueil = $this->container->router->pathFor('Accueil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
-        $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
-        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
         $url_authentification = $this->container->router->pathFor('authentification');

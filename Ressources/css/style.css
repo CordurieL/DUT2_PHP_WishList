@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600&family=Roboto:wght@200;500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&family=Neonderthaw&display=swap");
 
-
-
 :root {
   --fond: #ffffff;
 }
@@ -21,10 +19,9 @@ body {
   overflow-x: hidden;
 }
 
-
-
-a{
+a {
   position: relative;
+  color: deepskyblue;
 }
 a:visited {
   color: deepskyblue;
@@ -48,7 +45,6 @@ a:hover:before {
   visibility: visible;
   transform: scaleX(1);
 }
-
 
 #mainDiv {
   display: grid;
@@ -76,7 +72,6 @@ a:hover:before {
   border-top: solid 0.7em var(--fond);
   text-align: center;
   font-family: "Lobster";
-
 }
 
 .leftScreen {
@@ -113,8 +108,8 @@ a:hover:before {
   font-size: 1em;
 }
 
-.navigation:hover{
-  color : #1272b3;
+.navigation:hover {
+  color: #1272b3;
   background-color: white;
 }
 
@@ -138,7 +133,7 @@ hr {
   border: 2px solid aqua;
 }
 
-.lienAcc:active{
+.lienAcc:active {
   color: white;
 }
 
@@ -155,12 +150,12 @@ hr {
   font-family: "Roboto", bold;
   font-size: 1em;
 }
-.bout:hover{
-  color :#1272b3;
+.bout:hover {
+  color: #1272b3;
   background-color: white;
 }
 
-.inscri{
+.inscri {
   margin-top: 35px;
   background-color: white;
   border: #1272b3;
@@ -177,8 +172,8 @@ hr {
   position: relative;
   z-index: 1;
 }
-.inscri:hover{
-  color :white;
+.inscri:hover {
+  color: white;
   background-color: #1272b3;
 }
 
@@ -199,8 +194,6 @@ hr {
   position: relative;
   z-index: 1;
 }
-
-
 
 .homeCrea > h3 > span {
   font-size: 0.7em;
