@@ -1,0 +1,20 @@
+Depuis 'https://github.com/CordurieL/PHPWishList' , cloner le projet dans le htdocs, le répertoire où l'on place habituellement les fichiers php
+Créer dans phpmyadmin une base de donnée, puis à l'aide du fichier MyWishList.sql qui se trouve dans PHPWishList/Ressources/sql, importer l'ensemble des tables et u-plets
+Pour ce faire, il est recommandé de copier l'intégralité du contenu du fichier et de le coller dans la rubrique SQL (la deuxième dans le menu du haut)
+Créer dans PHPWishList/PHP/src un dossier conf 
+Mettre dans ce dossier un fichier que l'on nommera "conf.ini"
+
+Remplir ce fichier avec :
+driver=mysql
+host=localhost
+database='nomDeLaBDDcree'
+username='votreNomdAdmin'
+password='votreMdpPourlUsername'
+charset=utf8
+collation=utf8_unicode_ci
+
+Compléter le nom de la base le nom d'utilisateur et le mot de passe.
+
+Dans PHPWishList/PHP/ , ouvrir le terminal et faire 'composer install'. Un dossier vendor devrait notamment se créer aux côtés de src.
+
+Dans VueCreation.php et VueParticipant.php, changer la chemin qui suit "define('SCRIPT_ROOT'," par le chemin que vous obtenez en vous rendant à l'accueil du projet MyWishList (pour le css).
