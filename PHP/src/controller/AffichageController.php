@@ -17,11 +17,13 @@ class AffichageController
 {
     private Container $container;
 
+    // Constructeur
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
+    // methode pour vérifier que la chaine entree est conforme a nos attentes, s'adapte avec les differents filtres
     public static function verifier(mixed $chaine, int $filter) :string|null
     {
         $res = null;
@@ -35,10 +37,11 @@ class AffichageController
         return $res;
     }
 
+    // Pour l'accueil
     public function afficherAccueil(Request $rq, Response $rs, $args):Response
     {
-        $tabListes = array();
-        $tabListesCrees = array();
+        $tabListes = array(); // Donne les listes dont on a le token d'acces
+        $tabListesCrees = array(); // Donne les listes dont on a le token d'edition
         foreach ($_COOKIE as $nom => $valeur) {
             if (str_starts_with($nom, 'TokenAcces')) {
                 $liste = Liste::where('token', '=', $valeur)->first();
@@ -53,14 +56,13 @@ class AffichageController
                 }
             }
         }
-
         $vue = new VueParticipant([$tabListes, $tabListesCrees], $this->container) ;
         $html = $vue->render(0) ;
-       
         $rs->getBody()->write($html);
         return $rs;
     }
 
+    // Pour les listes publiques et non expirees
     public function afficherListes(Request $rq, Response $rs, $args):Response
     {
         $listes = Liste::all() ;
@@ -71,6 +73,7 @@ class AffichageController
         return $rs;
     }
 
+    // Pour afficher une liste
     public function afficherUneListe(Request $rq, Response $rs, $args):Response
     {
         /* Récupération des infos générales */
@@ -79,13 +82,13 @@ class AffichageController
         $data = $rq->getParsedBody();
         /* Pour l'acces a la liste elle meme */
         if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) || ("$liste[valide]" == 1)) {
-            $dateDExp = (new \DateTime("$liste[expiration]"));
             /* Empecher l'accès a la liste après expiration pour les visiteurs */
+            $dateDExp = (new \DateTime("$liste[expiration]"));
             if (!(isset($_COOKIE["TokenEdition:".$tokenEdition])) && ((new \DateTime('NOW')) > $dateDExp)) {
                 $vue = new VueParticipant([$liste->toArray(),$liste->items->toArray(),"",$liste->messages->toArray()], $this->container) ;
                 $html = $vue->render(4) ;
             } else {
-                /* Pour la validation d'une liste */
+                /* Pour la validation (publique) d'une liste */
                 if ((isset($data['publicationButton']))) {
                     $liste->valide = 1;
                     $liste->save();
@@ -111,7 +114,6 @@ class AffichageController
                     if ((isset($data['creadescription'])&&(($description = $this->verifier($data['creadescription'], FILTER_SANITIZE_STRING)) !=null))) {
                         $item->descr = $description;
                     }
-
                     $tariif = $_POST['creatarif'];
                     $item->nom =$nom;
                     $item->tarif = $tariif;
@@ -122,11 +124,11 @@ class AffichageController
                     $item->save();
                     //image avec fichier
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
-                        if (in_array(substr($_FILES['creaimage']['name'], -4), $types)) {
-                            $extension = substr($_FILES['creaimage']['name'], -3);
-                            move_uploaded_file($_FILES['creaimage']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
-                            $item->img = "{$item->id}.{$extension}";
-                        }
+                    if (in_array(substr($_FILES['creaimage']['name'], -4), $types)) {
+                        $extension = substr($_FILES['creaimage']['name'], -3);
+                        move_uploaded_file($_FILES['creaimage']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+                        $item->img = "{$item->id}.{$extension}";
+                    }
                     //image avec lien
                     if (isset($_POST['creaurlimage'])) {
                         $url = $data['creaurlimage'];
@@ -170,11 +172,12 @@ class AffichageController
         return $rs;
     }
 
+    // Pour afficher un item
     public function afficherUnItem(Request $rq, Response $rs, $args):Response
     {
+        /* Récupération des infos générales */
         $liste =Liste::where('token', '=', $args['token'])->first();
         $tokenEdition = "$liste[token_edition]";
-
         $item = Item::find($args['id']) ;
         $tokenListe = $liste->token;
         $dateDExp = (new \DateTime("$liste[expiration]"));
@@ -190,6 +193,7 @@ class AffichageController
             //traitement nom reservation
             if (is_null($item->nomReservation)&&(isset($data['nom'])&&($this->verifier($data['nom'], FILTER_SANITIZE_STRING) != null))) {
                 $nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
+                // l'item n'est pas en cagnotte
                 if ($item['estUneCagnotte'] == 0) {
                     $item->nomReservation = $nom;
                     if (isset($data['messageAuCreateur'])&&(($contenuMessage = $this->verifier($data['messageAuCreateur'], FILTER_SANITIZE_STRING)) != null)) {
@@ -198,6 +202,7 @@ class AffichageController
                     $item->tarif_restant = 0;
                     $item->update();
                 } else {
+                    // l'item est en cagnotte
                     $particip = new Participation();
                     $particip->item_id = $item->id;
                     $particip->nomparticipation = $nom;
@@ -213,6 +218,7 @@ class AffichageController
                     $item->update();
                 }
                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+                // Pour se souvenir de la personne sans compte
                 setcookie(
                     "nomReservation",
                     $nom,
@@ -294,6 +300,7 @@ class AffichageController
                 }
             }
         } else {
+            // On ne peut pas voir l'item
             $vue = new VueParticipant([$liste->toArray(),$item->toArray(), "../../"], $this->container);
             $html = $vue->render(4);
         }

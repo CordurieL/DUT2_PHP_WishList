@@ -112,7 +112,8 @@ class CreationController
         } else {
             $vue = new VueCreation([], $this->container);
             $html = $vue->render(14);
-            $rs->getBody()->write($html);;
+            $rs->getBody()->write($html);
+            ;
         }
         return $rs;
     }
