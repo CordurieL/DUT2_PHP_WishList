@@ -112,6 +112,7 @@ class VueCreation
             case 11: 
             {
                 $content = $this->authentifie();
+                break;
             }
         }
 

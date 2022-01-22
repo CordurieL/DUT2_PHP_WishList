@@ -78,7 +78,7 @@ class CreationController
                 $html = $vue->render(9);
                 $rs->getBody()->write($html);
             } else {
-                echo 'Essayer un autre pseudo';
+                echo 'Le pseudo est déjà pris, veuillez réessayer avec un nouveau pseudo.';
             }
         }
             
@@ -98,11 +98,11 @@ class CreationController
                 $html = $vue->render(11);
                 $rs->getBody()->write($html);
             } else {
-                echo 'mauvais mot de passe';
+                echo 'Le mot de passe ou le pseudo est invalide, veuillez réessayer.';
             }
             
         } else {
-            echo 'Pas encore de compte sur le site';
+            echo 'Le mot de passe ou le pseudo est invalide, veuillez réessayer.';
         }
         return $rs;
     }
