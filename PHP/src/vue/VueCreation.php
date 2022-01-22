@@ -39,8 +39,8 @@ class VueCreation
             <form method='POST' action=''>
             <h2>Inscription :</h2>
 	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
-	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='mot de passe' required/><br>
+	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirmez le mot de passe' required/><br>
 	        <button class='inscri' type='submit'>Inscription</button>
             </form>";
         echo "\n";
@@ -52,8 +52,8 @@ class VueCreation
         $content = "<form method='POST' action=''>
                <h2>Authentification :</h2>
 	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
-	        <button class='inscri' type='submit'>authentification</button>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='mot de passe' required/><br>
+	        <button class='inscri' type='submit'>s'authentifier</button>
             </form>";
         echo "\n";
         return $content;
