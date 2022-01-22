@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace mywishlist\vue;
 
-define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+define('SCRIPT_ROOT', 'http://localhost/projphp/PHPWishList/PHP/');
 
 class VueParticipant
 {
@@ -253,7 +253,7 @@ class VueParticipant
 
         $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         
-        $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">Retour à la liste</button>";
+        $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">← Retour à la liste</button><br>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
         } else {
@@ -372,9 +372,10 @@ class VueParticipant
             $content .= "Modifier les informations de l'item : (si l'item est réservé ou que vous ne possédez plus le token d'édition, cette action deviendra impossible)
         <form method='POST' action=''>
         <input type='text' name='nomItem'  placeholder='Nom de litem'/>
-        <input type='number' name='tarifItem' step ='0.01' min='0.01' placeholder='Tarif de litem'/><br>
-        <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
+        <input type='number' name='tarifItem' step ='0.01' min='0.01' placeholder='Tarif de litem'/>
         <input type='url' name='modifurlItem' placeholder='url'/><br>
+        <textarea name='descriItem' placeholder='Description de litem' maxlength=255 cols=50 rows=8></textarea><br>
+
         <button type='submit'>Modifier l'item</button>
         </form>";
         }
@@ -388,8 +389,9 @@ class VueParticipant
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])&&(("$i[nomReservation]"== null) || ($i['tarif'] == $i['tarif_restant']))&&(new \DateTime()) < $dateDExp) {
             $content .="<br>En guise de sécurité, pour supprimer l'item tapez ci-dessous : Je souhaite supprimer l'item
             <form method='POST' action=''>
-            <input type='text' name='securiteSupprimerItem' placeholder='tapez ici'/><br>
-            <button type='submit'>Supprimer l'item</button>
+
+            <input type='text' name='securiteSupprimerItem' placeholder='tapez ici'/>
+            <button type='submit'>X Supprimer l'item X</button>
             </form>";
         }
         return "<section>$content</section>";
@@ -476,7 +478,7 @@ class VueParticipant
 
         <div id='mainDiv'>
             <div class='upperScreen'>
-                <p><h1>My WishList</h1></p>
+                <p><h1 id='wish'>My WishList</h1></p>
             </div>
             <nav id='NavigationPrincipale' class='leftScreen'>
                 <button class='navigation' onclick="window.location.href='$url_Accueil'">Accueil</button>

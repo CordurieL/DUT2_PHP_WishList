@@ -2,7 +2,7 @@
 
 namespace mywishlist\vue;
 
-define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+define('SCRIPT_ROOT', 'http://localhost/projphp/PHPWishList/PHP/');
 
 class VueCreation
 {
@@ -26,7 +26,7 @@ class VueCreation
 	        <p>Description de la liste : </p><br>
 	        <div id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></div><br>
 	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
-	        <button type='submit'>Créer la liste</button>
+	        <button  type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
         return $content;
@@ -35,11 +35,13 @@ class VueCreation
     // Inscription
     public function creationFormulaireInscription() : string
     {
-        $content = "<form method='POST' action=''>
-	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input type='password' name ='pass' placeholder='pass' required/><br>
-	        <input type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
-	        <button type='submit'>Inscription</button>
+        $content = "
+            <form method='POST' action=''>
+            <h2>Inscription :</h2>
+	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
+	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
+	        <button class='inscri' type='submit'>Inscription</button>
             </form>";
         echo "\n";
         return $content;
@@ -48,16 +50,17 @@ class VueCreation
     public function creationFormulaireAuthentification() : string 
     {
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input type='password' name ='pass' placeholder='pass' required/><br>
-	        <button type='submit'>authentification</button>
+               <h2>Authentification :</h2>
+	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
+	        <button class='inscri' type='submit'>authentification</button>
             </form>";
         echo "\n";
         return $content;
     }
     public function compteCree():string 
     {
-        return "Votre compte à bien été créé ";
+        return "Votre compte a bien été créé ";
     }
     public function authentifie():string 
     {
