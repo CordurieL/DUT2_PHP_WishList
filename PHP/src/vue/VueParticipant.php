@@ -18,8 +18,21 @@ class VueParticipant
 
     private function htmlAccueil() : string
     {
-        $content = "Bienvenue à l'accueil";
-        return $content;
+        $content = "<h1>Les listes que vous avez consultées :</h1>";
+        $listes = $this->tab;
+        usort($listes, function ($l1, $l2) {
+            $exp1 = strtotime($l1['expiration']);
+            $exp2 = strtotime($l2['expiration']);
+            return $exp1 - $exp2;
+        });
+        foreach ($listes as $l) {
+            $dateDExp = (new \DateTime("$l[expiration]"));
+            if ($l['valide'] && ((new \DateTime()) < $dateDExp)) {
+                $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+                $content .= "<a href=$url><article><h3>$l[titre]</h3></article></a>";
+            }
+        }
+        return "<section>$content</section>";
     }
 
     private function htmlListes() : string
@@ -48,6 +61,14 @@ class VueParticipant
         $dateDExpString = $dateDExp->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
         $content = "";
+
+        setcookie(
+            "TokenAcces:".$l['token'],
+            $l['token'],
+            strtotime($dateDExpString) + (24 * 60 * 60),
+            "/"
+        );
+
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
             <script type='text/javascript'>
@@ -201,8 +222,17 @@ class VueParticipant
 
         $tokenEdition = "$l[token_edition]";
         $dateDExp = (new \DateTime("$l[expiration]"));
-        $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+        $dateDExpString = $dateDExp->format('d-m-Y');
 
+        setcookie(
+            "TokenAcces:".$l['token'],
+            $l['token'],
+            strtotime($dateDExpString) + (24 * 60 * 60),
+            "/"
+        );
+
+        $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+        
         $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">Retour à la liste</button>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";

@@ -30,23 +30,30 @@ class AffichageController
         return $res;
     }
 
-     public static function verifierUrl(mixed $chaine) :string|null
-        {
-            $res = null;
-            if (is_string($chaine)) {
-                $contenuChamp = filter_var($chaine, FILTER_SANITIZE_URL);
-                $contenuLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuChamp)));
-                if ($contenuChamp != "" && $contenuChamp != null && $contenuLength >0) {
-                    $res = $contenuChamp;
-                }
+    public static function verifierUrl(mixed $chaine) :string|null
+    {
+        $res = null;
+        if (is_string($chaine)) {
+            $contenuChamp = filter_var($chaine, FILTER_SANITIZE_URL);
+            $contenuLength = strlen((String) (preg_replace("/\s\s+/", "", $contenuChamp)));
+            if ($contenuChamp != "" && $contenuChamp != null && $contenuLength >0) {
+                $res = $contenuChamp;
             }
-            return $res;
         }
+        return $res;
+    }
 
     public function afficherAccueil(Request $rq, Response $rs, $args):Response
     {
-        $listes = \mywishlist\models\Liste::all() ;
-        $vue = new \mywishlist\vue\VueParticipant($listes->toArray(), $this->container) ;
+        $tabListes = array();
+        foreach ($_COOKIE as $nom => $valeur) {
+            if (str_starts_with($nom, 'TokenAcces')) {
+                echo 'dac';
+                $tabListes[] = \mywishlist\models\Liste::where('token', '=', $valeur)->first();
+            }
+        }
+
+        $vue = new \mywishlist\vue\VueParticipant($tabListes, $this->container) ;
         $html = $vue->render(0) ;
        
         $rs->getBody()->write($html);
@@ -111,7 +118,7 @@ class AffichageController
                         $item->img = "{$item->id}.{$extension}";
                     }
                     //image avec lien
-                    if(isset($_POST['creaurlimage'])){
+                    if (isset($_POST['creaurlimage'])) {
                         $url = $data['creaurlimage'];
                         if (in_array(substr($url, -4), $types)) {
                             $data = file_get_contents($url);
@@ -227,7 +234,7 @@ class AffichageController
 
             //ajout de l'image a l'item via un lien
             if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
-                if(isset($_POST['urlimage'])){
+                if (isset($_POST['urlimage'])) {
                     $url = $data['urlimage'];
                     $data = file_get_contents($url);
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
@@ -240,14 +247,13 @@ class AffichageController
                     $item->update();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
                 }
-
             }
 
             //supprime l'image d'un item
-            if (isset($_POST['supprimage'])){
-                 $item->img = NULL;
-                 $item->update();
-                 $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
+            if (isset($_POST['supprimage'])) {
+                $item->img = null;
+                $item->update();
+                $rs = $rs->withRedirect($this->container->router->pathFor('affUnItem', ['id'=>$args['id'], 'token'=>$args['token']]));
             }
 
 
@@ -259,7 +265,7 @@ class AffichageController
             }
 
             //modifier un item
-            if (isset($data['nomItem'])&&($this->verifierChamp($data['nomItem']) != null)||isset($data['tarifItem'])&&($this->verifierChamp($data['tarifItem']) != null)||isset($data['descriItem'])&&($this->verifierChamp($data['descriItem']) != null) || isset($data['modifurlItem'])&&($this->verifierUrl($data['modifurlItem']) != null) ) {
+            if (isset($data['nomItem'])&&($this->verifierChamp($data['nomItem']) != null)||isset($data['tarifItem'])&&($this->verifierChamp($data['tarifItem']) != null)||isset($data['descriItem'])&&($this->verifierChamp($data['descriItem']) != null) || isset($data['modifurlItem'])&&($this->verifierUrl($data['modifurlItem']) != null)) {
                 if (($nouveauNomItem = $this->verifierChamp($data['nomItem'])) != null) {
                     $item->nom = $nouveauNomItem;
                 }
