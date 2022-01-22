@@ -18,7 +18,7 @@ class VueCreation
         $this->container = $container;
     }
 
-    
+    /* methode pour creer un formulaire de creation de liste */
     public function CreationformulaireListe(): string
     {
         $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
@@ -36,7 +36,7 @@ class VueCreation
         return $content;
     }
 
-    // Inscription
+    /* methode pour creer un formulaire de creation de compte */
     public function creationFormulaireInscription() : string
     {
         $content = "
@@ -51,6 +51,7 @@ class VueCreation
         return $content;
     }
     
+    /* methode pour creer un formulaire d'authentification' */
     public function creationFormulaireAuthentification() : string
     {
         $content = "<form method='POST' action=''>
@@ -63,16 +64,19 @@ class VueCreation
         return $content;
     }
 
+    /* affichage après creation de compte */
     public function compteCree():string
     {
         return "Votre compte a bien été créé ";
     }
 
+    /* affichage après authentification */
     public function authentifie():string
     {
         return "connecte au compte ".$_SESSION['pseudo'];
     }
 
+    /* affichage après creation d'une liste' */
     public function listeCree():string
     {
         $l = $this->tab[0];
@@ -90,6 +94,7 @@ class VueCreation
         return $content;
     }
 
+    /* methode pour gerer les erreurs lors d'une inscription*/
     public function erreurins(string $s) : string
     {
         $url_inscription = $this->container->router->pathFor('inscription');
@@ -98,6 +103,7 @@ class VueCreation
         return "<section>$content</section>";
     }
 
+    /* methode pour gerer les erreurs lors d'une authentification*/
     public function erreurauth() : string
     {
         $url_authentification = $this->container->router->pathFor('authentification');
