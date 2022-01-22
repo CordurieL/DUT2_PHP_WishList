@@ -21,12 +21,12 @@ class VueCreation
         $content = "<form method='POST' action=''>
             <p>Créer votre liste de souhait : </p>
             <hr>
-            <p>Titre de la liste : </p><br>
-	        <div id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></div><br>
-	        <p>Description de la liste : </p><br>
-	        <div id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></div><br>
+            <p>Titre de la liste : </p>
+	        <span id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></span><br>
+	        <p>Description de la liste : </p>
+	        <span id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></span><br>
 	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
-	        <button  type='submit'>Créer la liste</button>
+	        <button class='inscri' type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
         return $content;
@@ -39,8 +39,8 @@ class VueCreation
             <form method='POST' action=''>
             <h2>Inscription :</h2>
 	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
-	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='mot de passe' required/><br>
+	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirmez le mot de passe' required/><br>
 	        <button class='inscri' type='submit'>Inscription</button>
             </form>";
         echo "\n";
@@ -52,8 +52,8 @@ class VueCreation
         $content = "<form method='POST' action=''>
                <h2>Authentification :</h2>
 	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
-	        <button class='inscri' type='submit'>authentification</button>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='mot de passe' required/><br>
+	        <button class='inscri' type='submit'>s'authentifier</button>
             </form>";
         echo "\n";
         return $content;
@@ -81,6 +81,19 @@ class VueCreation
         $url_nouvListe = $this->container->router->pathFor('affUneListe', ['token'=>"$l[token]"]);
         $content.= "<br>votre token d'édition = $tokenEdition a été créé<br><a href=$url_nouvListe>Vous rendre à votre nouvelle liste</a>";
         return $content;
+    }
+
+    public function erreurins(string $s) : string 
+    {
+        $content = $s. " ";
+        $content .= "<a href=$url_inscription>retour page inscription</a>";
+        return "<section>$content</section>";
+    }
+    public function erreurauth() : string 
+    {
+        $content = "Pseudo ou mot de passe invalide. ";
+        $content .= "<a href=$url_authentification>retour page authentification</a>";
+        return "<section>$content</section>";
     }
 
 
@@ -115,7 +128,24 @@ class VueCreation
             case 11: 
             {
                 $content = $this->authentifie();
+                break;
             }
+            case 12:
+            {
+                $content = $this->erreurins("Pseudo déjà utilisé veuilez réessayer.");
+                break;
+            }
+            case 13:
+            {
+                $content = $this->erreurins("Confirmation de mote de passe est fausse");
+                break;
+            }
+            case 14:
+            {
+                $content = $this->erreurauth();
+                break;
+            }
+            
         }
 
         $url_Accueil = $this->container->router->pathFor('Accueil');

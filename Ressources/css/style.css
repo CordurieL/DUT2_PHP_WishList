@@ -21,17 +21,32 @@ body {
 
 }
 
-a:link,
+
+
+a{
+  position: relative;
+}
 a:visited {
   color: deepskyblue;
   text-decoration: none;
 }
-a:hover {
-  color: aqua;
+
+a:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  margin: -5px 0;
+  background-color: aqua;
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.4s ease-in-out 0s;
 }
 
-a:active {
-  color: aqua;
+a:hover:before {
+  visibility: visible;
+  transform: scaleX(1);
 }
 
 
@@ -86,7 +101,7 @@ a:active {
   padding: 3%;
   /*Taille minimale des boutons*/
   min-width: 100px;
-  background-color: rgb(14, 95, 143);
+  background-color: #1272b3;
   color: white;
   border-radius: 25px;
   /*trucs*/
@@ -98,7 +113,7 @@ a:active {
 }
 
 .navigation:hover{
-  color : rgb(14, 95, 143);
+  color : #1272b3;
   background-color: white;
 }
 
@@ -122,11 +137,15 @@ hr {
   border: 2px solid aqua;
 }
 
-#boutonRetourListe {
+.lienAcc:active{
+  color: white;
+}
+
+.bout {
   margin-bottom: 1em;
   padding: 0.5em;
   min-width: 100px;
-  background-color: rgb(14, 95, 143);
+  background-color: #1272b3;
   color: white;
   border-radius: 25px;
   height: auto;
@@ -135,22 +154,22 @@ hr {
   font-family: "Roboto", bold;
   font-size: 1em;
 }
-#boutonRetourListe:hover{
-  color :rgb(14, 95, 143);
+.bout:hover{
+  color :#1272b3;
   background-color: white;
 }
 
 .inscri{
   margin-top: 35px;
   background-color: white;
-  border: rgb(14, 95, 143);
+  border: #1272b3;
   line-height: 0;
   font-size: 17px;
   display: inline-block;
   box-sizing: border-box;
   padding: 20px 15px;
   border-radius: 60px;
-  color: rgb(14, 95, 143);
+  color: #1272b3;
   font-weight: 100;
   letter-spacing: 0.01em;
   font-family: "Roboto", bold;
@@ -159,23 +178,20 @@ hr {
 }
 .inscri:hover{
   color :white;
-  background-color: rgb(14, 95, 143);
+  background-color: #1272b3;
 }
-
-
-
 
 .fieldinscri {
   margin-top: 20px;
   background-color: white;
-  border: rgb(14, 95, 143);
+  border: #1272b3;
   line-height: 0;
   font-size: 17px;
   display: inline-block;
   box-sizing: border-box;
   padding: 20px 15px;
   border-radius: 60px;
-  color: rgb(14, 95, 143);
+  color: #1272b3;
   font-weight: 100;
   letter-spacing: 0.01em;
   font-family: "Roboto", bold;

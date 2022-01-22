@@ -77,8 +77,14 @@ class CreationController
                 $html = $vue->render(9);
                 $rs->getBody()->write($html);
             } else {
-                echo 'Essayer un autre pseudo';
+                $vue = new VueCreation([], $this->container);
+                $html = $vue->render(12);
+                $rs->getBody()->write($html);
             }
+        } else {
+            $vue = new VueCreation([], $this->container);
+            $html = $vue->render(13);
+            $rs->getBody()->write($html);
         }
             
         return $rs;
@@ -97,10 +103,14 @@ class CreationController
                 $html = $vue->render(11);
                 $rs->getBody()->write($html);
             } else {
-                echo 'mauvais mot de passe';
+                $vue = new VueCreation([], $this->container);
+                $html = $vue->render(14);
+                $rs->getBody()->write($html);
             }
         } else {
-            echo 'Pas encore de compte sur le site';
+            $vue = new VueCreation([], $this->container);
+            $html = $vue->render(14);
+            $rs->getBody()->write($html);;
         }
         return $rs;
     }
