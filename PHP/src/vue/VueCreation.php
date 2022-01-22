@@ -1,20 +1,24 @@
 <?php
+declare(strict_types=1);
 
 namespace mywishlist\vue;
 
-define('SCRIPT_ROOT', 'http://localhost/projphp/PHPWishList/PHP/');
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
+use \Slim\Container;
 
 class VueCreation
 {
     public array $tab;
-    public \Slim\Container $container;
+    public Container $container;
 
-    public function __construct(array $tab, \Slim\Container $container)
+    public function __construct(array $tab, Container $container)
     {
         $this->tab = $tab;
         $this->container = $container;
     }
 
+    
     public function CreationformulaireListe(): string
     {
         $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
@@ -47,7 +51,7 @@ class VueCreation
         return $content;
     }
     
-    public function creationFormulaireAuthentification() : string 
+    public function creationFormulaireAuthentification() : string
     {
         $content = "<form method='POST' action=''>
                <h2>Authentification :</h2>
@@ -58,14 +62,17 @@ class VueCreation
         echo "\n";
         return $content;
     }
-    public function compteCree():string 
+
+    public function compteCree():string
     {
         return "Votre compte a bien été créé ";
     }
-    public function authentifie():string 
+
+    public function authentifie():string
     {
         return "connecte au compte ".$_SESSION['pseudo'];
     }
+
     public function listeCree():string
     {
         $l = $this->tab[0];
@@ -83,21 +90,21 @@ class VueCreation
         return $content;
     }
 
-    public function erreurins(string $s) : string 
+    public function erreurins(string $s) : string
     {
         $url_inscription = $this->container->router->pathFor('inscription');
         $content = $s. " ";
         $content .= "<a href=$url_inscription>retour page inscription</a>";
         return "<section>$content</section>";
     }
-    public function erreurauth() : string 
+
+    public function erreurauth() : string
     {
         $url_authentification = $this->container->router->pathFor('authentification');
         $content = "Pseudo ou mot de passe invalide. ";
         $content .= "<a href=$url_authentification>retour page authentification</a>";
         return "<section>$content</section>";
     }
-
 
     public function render($selecteur)
     {
@@ -127,19 +134,19 @@ class VueCreation
                 $content = $this->creationFormulaireAuthentification();
                 break;
             }
-            case 11: 
+            case 11:
             {
                 $content = $this->authentifie();
                 break;
             }
             case 12:
             {
-                $content = $this->erreurins("Pseudo déjà utilisé veuilez réessayer.");
+                $content = $this->erreurins("Pseudo déjà utilisé, veuilez réessayer.");
                 break;
             }
             case 13:
             {
-                $content = $this->erreurins("Confirmation de mote de passe est fausse");
+                $content = $this->erreurins("Confirmation de mot de passe éronné");
                 break;
             }
             case 14:
@@ -152,8 +159,6 @@ class VueCreation
 
         $url_Accueil = $this->container->router->pathFor('Accueil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
-        $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
-        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
         $url_authentification = $this->container->router->pathFor('authentification');

@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 namespace mywishlist\vue;
 
-define('SCRIPT_ROOT', 'http://localhost/projphp/PHPWishList/PHP/');
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
+use \Slim\Container;
 
 class VueParticipant
 {
     public array $tab;
-    public \Slim\Container $container;
+    public Container $container;
 
-    public function __construct(array $tab, \Slim\Container $container)
+    public function __construct(array $tab, Container $container)
     {
         $this->tab = $tab;
         $this->container = $container;
@@ -22,7 +24,6 @@ class VueParticipant
         if (isset($_SESSION['pseudo'])) {
             $content = $content . ' ' . $_SESSION['pseudo'];
         }
-
         $content .= "<br><h1>Vos créations :</h1>";
         $listesCrea = $this->tab[1];
         usort($listesCrea, function ($l1, $l2) {
@@ -40,7 +41,6 @@ class VueParticipant
             $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
             $content .= "<a href=$url><article class='homeCrea'><h3>$l[titre] : <span>$etatliste</span></h3></article></a>";
         }
-
         $content .= "<hr><h1>Les listes que vous avez consultées et dont vous n'êtes pas l'auteur :</h1>";
         $listes = $this->tab[0];
         usort($listes, function ($l1, $l2) {
@@ -88,7 +88,6 @@ class VueParticipant
         $dateDExpString = $dateDExp->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
         $content = "";
-
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
             <script type='text/javascript'>
@@ -177,35 +176,8 @@ class VueParticipant
             $idItem = $i['id'];
             $url = $this->container->router->pathFor('affUnItem', ['id'=>$i['id'], 'token'=>$l['token']]);
             $content .= "<div><li><a href='$url'>$i[nom]</a> : ";
-            /* Le token pour savoir si on est l'éditeur */
             if (isset($_COOKIE["TokenEdition:".$tokenEdition]) && ((new \DateTime()) < $dateDExp)) {
-                /*$etatItem = "$i[nomReservation]";
-                if ($etatItem == null) {
-                    $etatItem = "Pas encore réservé";
-                } else {
-                    $etatItem = "Réservé";
-                }
-                $content .=
-                "<script type='text/javascript'>
-                function montrerReserv(obj)
-                {
-                    var reserv = document.getElementById('reservCachee$idItem');
-                    var boutonReserv = document.getElementById('reservCacheeBouton$idItem');
-                    if (reserv.style.display == 'none'){
-                        reserv.style.display = '';
-                        boutonReserv.value = 'Cacher';
-                    }else{
-                        reserv.style.display = 'none';
-                        boutonReserv.value = 'Voir';
-                    }
-                }
-                </script>*/
                 $content .= "C'est vous qui avez créé la liste, vous ne pouvez pas voir qui a réservé cet item avant le $dateDExpString<br>";
-            /*<span>
-            Etat de la réservation :
-                <input id='reservCacheeBouton$idItem' type='button' value='Voir' onclick='montrerReserv(this);'>
-                    <span id='reservCachee$idItem' style='display: none;'>$etatItem</span>
-            </span>";*/
             } else {
                 if ($i['nomReservation'] == null) {
                     if ($i['estUneCagnotte'] == false) {
@@ -243,7 +215,6 @@ class VueParticipant
         if (isset($_COOKIE["nomReservation"])) {
             $champ .= $_COOKIE["nomReservation"];
         }
-        //Affichage de l'item
         $i = $this->tab[0];
         $l = $this->tab[1];
 
@@ -458,8 +429,6 @@ class VueParticipant
 
         $url_Accueil = $this->container->router->pathFor('Accueil');
         $url_listes = $this->container->router->pathFor('listeDesListes');
-        $url_liste = $this->container->router->pathFor('affUneListe', ['token'=>'nosecure1']);
-        $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
         $url_authentification = $this->container->router->pathFor('authentification');

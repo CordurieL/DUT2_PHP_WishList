@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace mywishlist\controller;
 
+use \Slim\Container;
 use mywishlist\models\Item;
-use mywishlist\models\Liste as Liste;
+use mywishlist\models\Liste;
 use mywishlist\models\Compte;
 use mywishlist\vue\VueCreation as VueCreation;
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,9 +13,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 class CreationController
 {
-    private \Slim\Container $container;
+    private Container $container;
 
-    public function __construct(\Slim\Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -46,7 +48,7 @@ class CreationController
         return $rs;
     }
 
-    public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response 
+    public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
         $html = $vue->render(8);
@@ -54,7 +56,7 @@ class CreationController
         return $rs;
     }
 
-    public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response 
+    public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
         $html = $vue->render(10);
@@ -63,9 +65,8 @@ class CreationController
     }
     // Inscription
     public function traiterFormInscription(Request $rq, Response $rs, $args):Response
-    {    
-        if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING))
-        {           
+    {
+        if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING)) {
             $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING);
             $count = Compte::where('pseudo', $pseudo)->count();
             if ($count == 0) {
@@ -91,7 +92,7 @@ class CreationController
         return $rs;
     }
     
-    public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response 
+    public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response
     {
         $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING); //filtrage du pseudo
         $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING); //filtrage et hashage du mot de passe
@@ -108,7 +109,6 @@ class CreationController
                 $html = $vue->render(14);
                 $rs->getBody()->write($html);
             }
-            
         } else {
             $vue = new VueCreation([], $this->container);
             $html = $vue->render(14);
@@ -116,5 +116,4 @@ class CreationController
         }
         return $rs;
     }
-    
 }
