@@ -35,10 +35,12 @@ class VueCreation
     // Inscription
     public function creationFormulaireInscription() : string
     {
-        $content = "<form method='POST' action=''>
-	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
-	        <input type='password' name ='pass' placeholder='pass' required/><br>
-	        <input type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
+        $content = "
+            <form method='POST' action=''>
+            <h2>Inscription :</h2>
+	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
+	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
+	        <input class='fieldinscri' type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
 	        <button class='inscri' type='submit'>Inscription</button>
             </form>";
         echo "\n";
@@ -48,7 +50,8 @@ class VueCreation
     public function creationFormulaireAuthentification() : string 
     {
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
+               <h2>Authentification :</h2>
+	        <input class='fieldinscri' type='text' name ='pseudo' placeholder='pseudo' required/><br>
 	        <input class='fieldinscri' type='password' name ='pass' placeholder='pass' required/><br>
 	        <button class='inscri' type='submit'>authentification</button>
             </form>";
@@ -57,7 +60,7 @@ class VueCreation
     }
     public function compteCree():string 
     {
-        return "Votre compte à bien été créé ";
+        return "Votre compte a bien été créé ";
     }
     public function authentifie():string 
     {

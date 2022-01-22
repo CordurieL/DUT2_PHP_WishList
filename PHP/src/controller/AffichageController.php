@@ -119,13 +119,22 @@ class AffichageController
                     if ((isset($data['creadescription'])&&(($description = $this->verifierChamp($data['creadescription'])) !=null))) {
                         $item->descr = $description;
                     }
+
+                    $tariif = $_POST['creatarif'];
+                    $item->nom =$nom;
+                    $item->tarif = $tariif;
+                    $item->tarif_restant = $item->tarif;
+                    $url = filter_var($_POST['creaurl'], FILTER_SANITIZE_URL);
+                    $item->url = $url;
+                    $item->liste_id = $liste->no;
+                    $item->save();
                     //image avec fichier
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
-                    if (in_array(substr($_FILES['creaimage']['name'], -4), $types)) {
-                        $extension = substr($_FILES['creaimage']['name'], -3);
-                        move_uploaded_file($_FILES['creaimage']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
-                        $item->img = "{$item->id}.{$extension}";
-                    }
+                        if (in_array(substr($_FILES['creaimage']['name'], -4), $types)) {
+                            $extension = substr($_FILES['creaimage']['name'], -3);
+                            move_uploaded_file($_FILES['creaimage']['tmp_name'], "../Ressources/img/{$item->id}.{$extension}");
+                            $item->img = "{$item->id}.{$extension}";
+                        }
                     //image avec lien
                     if (isset($_POST['creaurlimage'])) {
                         $url = $data['creaurlimage'];
@@ -138,14 +147,7 @@ class AffichageController
                             $item->img = "{$item->id}.{$extension}";
                         }
                     }
-                    $tariif = $_POST['creatarif'];
-                    $item->nom =$nom;
-                    $item->tarif = $tariif;
-                    $item->tarif_restant = $item->tarif;
-                    $url = filter_var($_POST['creaurl'], FILTER_SANITIZE_URL);
-                    $item->url = $url;
-                    $item->liste_id = $liste->no;
-                    $item->save();
+                    $item->update();
                     $rs = $rs->withRedirect($this->container->router->pathFor('affUneListe', ['token'=>$args['token']]));
                 }
                 /* Pour les messages de liste */
