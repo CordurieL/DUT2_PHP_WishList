@@ -17,6 +17,10 @@ class VueParticipant
     private function htmlAccueil() : string
     {
         $content = "Bienvenue à l'accueil";
+        if(isset($_SESSION['pseudo'])) {
+            $content = $content . ' ' . $_SESSION['pseudo'];
+        }
+
         return $content;
     }
 
@@ -297,6 +301,7 @@ class VueParticipant
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
+        $url_authentification = $this->container->router->pathFor('authentification');
 
         $html = <<<END
 <!DOCTYPE html>
@@ -310,6 +315,7 @@ class VueParticipant
     <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
     <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
     <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
+    <div><a href=$url_authentification>Authentification (démo, emplacement temporaire)</a></div>
     </nav>
         <br>
         <div class="content">

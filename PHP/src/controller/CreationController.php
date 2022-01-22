@@ -46,24 +46,65 @@ class CreationController
         return $rs;
     }
 
-    // Inscription
-    public function traiterFormInscription(Request $rq, Response $rs, $args):Response
+    public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response 
     {
-        $data = $rq->getParsedBody();
-        $pseudo = filter_var($data['pseudo'], FILTER_SANITIZE_STRING);
-        $pass = password_hash(filter_var($data['pass'], FILTER_SANITIZE_STRING), PASSWORD_BCRYPT);
-        $compte = new Compte();
-        $compte->pseudo = $pseudo;
-        $compte->pass = $pass;
-        $compte->save();
-        $vue = new VueCreation([$compte->toArray()], $this->container);
+        $vue = new VueCreation([], $this->container);
         $html = $vue->render(8);
         $rs->getBody()->write($html);
         return $rs;
     }
-    
-    // à compléter
-    public function registerForm()
+
+    public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response 
     {
+        $vue = new VueCreation([], $this->container);
+        $html = $vue->render(10);
+        $rs->getBody()->write($html);
+        return $rs;
     }
+    // Inscription
+    public function traiterFormInscription(Request $rq, Response $rs, $args):Response
+    {    
+        if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING))
+        {           
+            $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING);
+            $count = Compte::where('pseudo', $pseudo)->count();
+            if ($count == 0) {
+                $pass = password_hash(filter_var($_POST['pass'], FILTER_SANITIZE_STRING), PASSWORD_BCRYPT);
+                $compte = new Compte();
+                $compte->pseudo = $pseudo;
+                $compte->pass = $pass;
+                $compte->save();
+                $vue = new VueCreation([$compte->toArray()], $this->container);
+                $html = $vue->render(9);
+                $rs->getBody()->write($html);
+            } else {
+                echo 'Essayer un autre pseudo';
+            }
+        }
+            
+        return $rs;
+    }
+    
+    public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response 
+    {
+        $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING); //filtrage du pseudo
+        $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING); //filtrage et hashage du mot de passe
+        $count1 = Compte::where('pseudo', $pseudo)->count();
+        if ($count1 == 1) {
+            $c = Compte::where('pseudo', $pseudo)->first();
+            if (password_verify($pass, $c['pass'])) {
+                $_SESSION['pseudo'] = $pseudo;
+                $vue = new VueCreation([], $this->container);
+                $html = $vue->render(11);
+                $rs->getBody()->write($html);
+            } else {
+                echo 'mauvais mot de passe';
+            }
+            
+        } else {
+            echo 'Pas encore de compte sur le site';
+        }
+        return $rs;
+    }
+    
 }

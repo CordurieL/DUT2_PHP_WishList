@@ -75,4 +75,4 @@ CREATE TABLE `compte` (
   `pseudo` text NOT NULL,
   `pass` text NOT NULL,
   PRIMARY KEY(`no_compte`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
