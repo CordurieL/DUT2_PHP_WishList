@@ -83,6 +83,19 @@ class VueCreation
         return $content;
     }
 
+    public function erreurins(string $s) : string 
+    {
+        $content = $s. " ";
+        $content .= "<a href=$url_inscription>retour page inscription</a>";
+        return "<section>$content</section>";
+    }
+    public function erreurauth() : string 
+    {
+        $content = "Pseudo ou mot de passe invalide. ";
+        $content .= "<a href=$url_authentification>retour page authentification</a>";
+        return "<section>$content</section>";
+    }
+
 
     public function render($selecteur)
     {
@@ -117,6 +130,22 @@ class VueCreation
                 $content = $this->authentifie();
                 break;
             }
+            case 12:
+            {
+                $content = $this->erreurins("Pseudo déjà utilisé veuilez réessayer.");
+                break;
+            }
+            case 13:
+            {
+                $content = $this->erreurins("Confirmation de mote de passe est fausse");
+                break;
+            }
+            case 14:
+            {
+                $content = $this->erreurauth();
+                break;
+            }
+            
         }
 
         $url_Accueil = $this->container->router->pathFor('Accueil');
