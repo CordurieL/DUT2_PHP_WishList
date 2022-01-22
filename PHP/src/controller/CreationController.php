@@ -46,7 +46,7 @@ class CreationController
         return $rs;
     }
 
-    public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response 
+    public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
         $html = $vue->render(8);
@@ -54,7 +54,7 @@ class CreationController
         return $rs;
     }
 
-    public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response 
+    public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
         $html = $vue->render(10);
@@ -63,9 +63,8 @@ class CreationController
     }
     // Inscription
     public function traiterFormInscription(Request $rq, Response $rs, $args):Response
-    {    
-        if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING))
-        {           
+    {
+        if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING)) {
             $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING);
             $count = Compte::where('pseudo', $pseudo)->count();
             if ($count == 0) {
@@ -85,7 +84,7 @@ class CreationController
         return $rs;
     }
     
-    public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response 
+    public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response
     {
         $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING); //filtrage du pseudo
         $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING); //filtrage et hashage du mot de passe
@@ -100,11 +99,9 @@ class CreationController
             } else {
                 echo 'mauvais mot de passe';
             }
-            
         } else {
             echo 'Pas encore de compte sur le site';
         }
         return $rs;
     }
-    
 }
