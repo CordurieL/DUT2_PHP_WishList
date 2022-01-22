@@ -2,6 +2,8 @@
 
 namespace mywishlist\vue;
 
+define('SCRIPT_ROOT', 'http://localhost/FichiersPHP/PHPWishList/PHP/');
+
 class VueCreation
 {
     public array $tab;
@@ -17,8 +19,12 @@ class VueCreation
     {
         $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='titre' placeholder='titre' required/><br>
-	        <input type='text' name ='description' placeholder='descri'/><br>
+            <p>Créer votre liste de souhait : </p>
+            <hr>
+            <p>Titre de la liste : </p><br>
+	        <div id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></div><br>
+	        <p>Description de la liste : </p><br>
+	        <div id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></div><br>
 	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
 	        <button type='submit'>Créer la liste</button>
             </form>";
@@ -62,7 +68,7 @@ class VueCreation
         $l = $this->tab[0];
         $tokenEdition = "$l[token_edition]";
         $dateDExp = (new \DateTime("$l[expiration]"))->format('d-m-Y');
-        $content = "La liste a été créé : <article>$l[no] ; $l[user_id] ; $l[titre] ; $l[description] ; $dateDExp ; $l[token] ; $tokenEdition</article>\n";
+        $content = "La liste a été créé : <article><h1>$l[titre]</h1>  <br>$l[description] <br>Expire le $dateDExp</article>\n";
         setcookie(
             "TokenEdition:".$tokenEdition,
             $tokenEdition,
@@ -116,24 +122,34 @@ class VueCreation
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
         $url_authentification = $this->container->router->pathFor('authentification');
+        $root = SCRIPT_ROOT;
+
 
         $html = <<<END
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <title>My WishList</title>
+        <meta charset="utf-8"/>
+        <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
+    </head>
     <body>
-    <h1>My WishList</h1>
-    <nav>
-    <div><a href=$url_Accueil>Accueil</a></div>
-    <div><a href=$url_affichageForm>Créer une nouvelle liste</a></div>
-    <div><a href=$url_listes>Listes publiques</a></div>
-    <div><a href=$url_liste>Lien vers la liste 1 (temporaire)</a></div>
-    <div><a href=$url_item>Lien vers l'item 1 (temporaire)</div>
-    <div><a href=$url_inscription>Inscription (démo, emplacement temporaire)</a></div>
-    <div><a href=$url_authentification>Authentification (démo, emplacement temporaire)</a></div>
-    </nav>
-        <br>
-        <div class="content">
-        $content
+        <div id='mainDiv'>
+            <div class='upperScreen'>
+                <p><h1>My WishList</h1></p>
+            </div>
+            <nav id='NavigationPrincipale' class='leftScreen'>
+                <button class='navigation' onclick="window.location.href='$url_Accueil'">Accueil</button>
+                <button class='navigation' onclick="window.location.href='$url_affichageForm'">Créer une nouvelle liste</button>
+                <button class='navigation' onclick="window.location.href='$url_listes'">Listes publiques</button>
+                <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_authentification'">Authentification (démo, emplacement temporaire)</button>
+            </nav>
+            <div class="content">
+                $content
+            </div>
         </div>
     </body>
 </html>

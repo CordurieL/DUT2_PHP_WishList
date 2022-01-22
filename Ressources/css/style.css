@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600&family=Roboto:wght@200;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Neonderthaw&display=swap");
+
+:root {
+  --fond: #111121;
+}
+
+html {
+  background-color: var(--fond);
+  color: aliceblue;
+  font-family: "Roboto", serif;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding-top: 0;
+  margin-top: 0;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+a:link,
+a:visited {
+  color: deepskyblue;
+  text-decoration: none;
+}
+
+a:hover {
+  color: aqua;
+}
+
+a:active {
+  color: aquamarine;
+}
+
+#mainDiv {
+  display: grid;
+  grid-template-columns: 23em auto;
+  grid-template-rows: 5% 95%;
+}
+
+.leftScreen,
+.content {
+  border-radius: 2em;
+  border: solid 0.5em #202020;
+}
+
+.upperScreen {
+  position: sticky;
+  grid-column: 1 / 3;
+  grid-row: 1;
+  background-color: #1272b3;
+  padding-top: 0;
+  margin-top: 0;
+  top: 0em;
+  z-index: 1;
+  border-bottom: solid 1em var(--fond);
+  border-top: solid 0.7em var(--fond);
+  text-align: center;
+  font-family: "Lobster";
+}
+
+.leftScreen {
+  position: fixed;
+  background-color: #2c2c2c;
+  height: 30em;
+  width: 20em;
+  text-align: center;
+  margin-top: 6.9em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1em;
+}
+
+.navigation {
+  /*Espacement entre les boutons*/
+  margin-top: auto;
+  margin-bottom: auto;
+  /*Réduction du padding autour des boutons (boutons plus gros avec grand padding)*/
+  padding: 3%;
+  /*Taille minimale des boutons*/
+  min-width: 100px;
+  background-color: rgb(14, 95, 143);
+  color: white;
+  border-radius: 25px;
+  /*trucs*/
+  height: auto;
+  border: inset 2px deepskyblue;
+  cursor: pointer;
+  font-family: "Roboto", bold;
+  font-size: 1em;
+}
+
+.content {
+  grid-column: 2;
+  grid-row: 2;
+  background-color: #2c2c2c;
+  height: auto;
+  width: auto;
+  min-width: 60em;
+  margin-left: 1em;
+  padding: 1.5em;
+}
+
+#inputInscription {
+  height: auto;
+  width: auto;
+}
+
+
+
+hr {
+  border: 2px solid rgb(19, 19, 143);
+}
+
+#boutonRetourListe {
+  margin-bottom: 1em;
+  padding: 0.5em;
+  min-width: 100px;
+  background-color: rgb(14, 95, 143);
+  color: white;
+  border-radius: 25px;
+  height: auto;
+  border: inset 2px deepskyblue;
+  cursor: pointer;
+  font-family: "Roboto", bold;
+  font-size: 1em;
+}
