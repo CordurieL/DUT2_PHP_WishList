@@ -57,11 +57,11 @@ class VueCreation
     }
     public function compteCree():string 
     {
-        return "ptn de merde oui";
+        return "Votre compte à bien été créé ";
     }
     public function authentifie():string 
     {
-        return "connecte".$_SESSION['pseudo'];
+        return "connecte au compte ".$_SESSION['pseudo'];
     }
     public function listeCree():string
     {
