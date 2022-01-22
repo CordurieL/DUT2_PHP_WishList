@@ -85,12 +85,14 @@ class VueCreation
 
     public function erreurins(string $s) : string 
     {
+        $url_inscription = $this->container->router->pathFor('inscription');
         $content = $s. " ";
         $content .= "<a href=$url_inscription>retour page inscription</a>";
         return "<section>$content</section>";
     }
     public function erreurauth() : string 
     {
+        $url_authentification = $this->container->router->pathFor('authentification');
         $content = "Pseudo ou mot de passe invalide. ";
         $content .= "<a href=$url_authentification>retour page authentification</a>";
         return "<section>$content</section>";
