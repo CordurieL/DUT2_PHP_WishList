@@ -20,6 +20,7 @@ class CreationController
         $this->container = $container;
     }
 
+    /* methode pour afficher le formulaire pour la creation d'une liste */
     public function afficherFormulaire(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
@@ -28,6 +29,7 @@ class CreationController
         return $rs;
     }
 
+    /* methode pour traiter les champs du formulaire pour la creation d'une liste */
     public function traiterFormListe(Request $rq, Response $rs, $args):Response
     {
         $data = $rq->getParsedBody();
@@ -48,6 +50,7 @@ class CreationController
         return $rs;
     }
 
+    /* methode pour afficher le formulaire pour la creation d'un compte */
     public function afficherFormulaireInscription(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
@@ -56,6 +59,7 @@ class CreationController
         return $rs;
     }
 
+    /* methode pour afficher le formulaire pour l'authentification */
     public function afficherFormulaireAuthentification(Request $rq, Response $rs, $args):Response
     {
         $vue = new VueCreation([], $this->container);
@@ -63,7 +67,8 @@ class CreationController
         $rs->getBody()->write($html);
         return $rs;
     }
-    // Inscription
+    
+    /* methode pour traiter les champs du formulaire pour la creation d'un compte */
     public function traiterFormInscription(Request $rq, Response $rs, $args):Response
     {
         if (filter_var($_POST['pass'], FILTER_SANITIZE_STRING) == filter_var($_POST['confirm_pass'], FILTER_SANITIZE_STRING)) {
@@ -92,10 +97,11 @@ class CreationController
         return $rs;
     }
     
+    /* methode pour traiter les champs du formulaire pour l'authentification' */
     public function traiterFormAuthentification(Request $rq, Response $rs, $args):Response
     {
-        $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING); //filtrage du pseudo
-        $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING); //filtrage et hashage du mot de passe
+        $pseudo = filter_var($_POST['pseudo'], FILTER_SANITIZE_STRING); 
+        $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING); 
         $count1 = Compte::where('pseudo', $pseudo)->count();
         if ($count1 == 1) {
             $c = Compte::where('pseudo', $pseudo)->first();
