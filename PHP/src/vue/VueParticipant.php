@@ -18,18 +18,45 @@ class VueParticipant
 
     private function htmlAccueil() : string
     {
-        $content = "<h1>Les listes que vous avez consultées :</h1>";
-        $listes = $this->tab;
+        $content = "Bienvenue à l'accueil";
+        if (isset($_SESSION['pseudo'])) {
+            $content = $content . ' ' . $_SESSION['pseudo'];
+        }
+
+        $content .= "<br><h1>Vos créations :</h1>";
+        $listesCrea = $this->tab[1];
+        usort($listesCrea, function ($l1, $l2) {
+            $exp1 = strtotime($l1['expiration']);
+            $exp2 = strtotime($l2['expiration']);
+            return $exp1 - $exp2;
+        });
+        foreach ($listesCrea as $l) {
+            $etatliste ="";
+            if ($l['valide']) {
+                $etatliste ="publique";
+            } else {
+                $etatliste ="privée";
+            }
+            $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
+            $content .= "<a href=$url><article class='homeCrea'><h3>$l[titre] : <span>$etatliste</span></h3></article></a>";
+        }
+
+        $content .= "<hr><h1>Les listes que vous avez consultées et dont vous n'êtes pas l'auteur :</h1>";
+        $listes = $this->tab[0];
         usort($listes, function ($l1, $l2) {
             $exp1 = strtotime($l1['expiration']);
             $exp2 = strtotime($l2['expiration']);
             return $exp1 - $exp2;
         });
         foreach ($listes as $l) {
+            $etatliste ="";
+            if (!$l['valide']) {
+                $etatliste =" : encore inacessible";
+            }
             $dateDExp = (new \DateTime("$l[expiration]"));
-            if ($l['valide'] && ((new \DateTime()) < $dateDExp)) {
+            if (((new \DateTime()) < $dateDExp) && (!isset($_COOKIE["TokenEdition:".$l['token_edition']]))) {
                 $url = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
-                $content .= "<a href=$url><article><h3>$l[titre]</h3></article></a>";
+                $content .= "<a href=$url><article class='homeCrea'><h3>$l[titre]<span>$etatliste</span></h3></article></a>";
             }
         }
         return "<section>$content</section>";
@@ -61,13 +88,6 @@ class VueParticipant
         $dateDExpString = $dateDExp->format('d-m-Y');
         $tokenEdition = "$l[token_edition]";
         $content = "";
-
-        setcookie(
-            "TokenAcces:".$l['token'],
-            $l['token'],
-            strtotime($dateDExpString) + (24 * 60 * 60),
-            "/"
-        );
 
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "
@@ -141,6 +161,13 @@ class VueParticipant
             <button type='submit' id='Bcree' onClick='verifChamps();' >Créer l'item</button>
             </form>
             <br>";
+        } else {
+            setcookie(
+                "TokenAcces:".$l['token'],
+                $l['token'],
+                strtotime($dateDExpString) + (24 * 60 * 60),
+                "/"
+            );
         }
         $content .="<article><h1>Liste de souhaits : $l[titre]</h1><br><b>Description :</b> <i>$l[description]</i> <br>Expire le $dateDExpString<br><small>Liste numéro $l[no] <br>Par l'utilisateur ayant l'id $l[user_id]</small> </article>\n";
         $item = $this->tab[1];
@@ -224,18 +251,18 @@ class VueParticipant
         $dateDExp = (new \DateTime("$l[expiration]"));
         $dateDExpString = $dateDExp->format('d-m-Y');
 
-        setcookie(
-            "TokenAcces:".$l['token'],
-            $l['token'],
-            strtotime($dateDExpString) + (24 * 60 * 60),
-            "/"
-        );
-
         $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         
         $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">Retour à la liste</button>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
             $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
+        } else {
+            setcookie(
+                "TokenAcces:".$l['token'],
+                $l['token'],
+                strtotime($dateDExpString) + (24 * 60 * 60),
+                "/"
+            );
         }
         $content .= "
         <script>
@@ -379,6 +406,7 @@ class VueParticipant
         $appel = $this->tab[2]; // vaut ../../ si l'appel viens d'un affichage item, vide sinon
         $content = "";
         $dateDExp = (new \DateTime("$l[expiration]"));
+        $dateDExpString = $dateDExp->format('d-m-Y');
         $now = new \DateTime();
         $url_Accueil = $this->container->router->pathFor('Accueil');
         if ($now > $dateDExp) {
@@ -389,6 +417,12 @@ class VueParticipant
             $content .= "<h1>Cette liste n'a pas encore été rendu publique par son créateur</h1>
         <img style='max-width: 500px' src='$appel../../Ressources/img/soon.jpg'>
         ";
+            setcookie(
+                "TokenAcces:".$l['token'],
+                $l['token'],
+                strtotime($dateDExpString) + (24 * 60 * 60),
+                "/"
+            );
         }
         $content .= "<a href=$url_Accueil>Retour à l'accueil</a></div>";
         return "<section>$content</section>";
@@ -426,7 +460,9 @@ class VueParticipant
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure2']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
+        $url_authentification = $this->container->router->pathFor('authentification');
         $root = SCRIPT_ROOT;
+
 
         $html = <<<END
     <!DOCTYPE html>
@@ -437,6 +473,7 @@ class VueParticipant
         <link href="$root../Ressources/css/style.css" type="text/css" rel="stylesheet"/>
     </head>
     <body>
+
         <div id='mainDiv'>
             <div class='upperScreen'>
                 <p><h1>My WishList</h1></p>
@@ -448,10 +485,12 @@ class VueParticipant
                 <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
                 <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
                 <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_authentification'">Authentification (démo, emplacement temporaire)</button>
             </nav>
             <div class="content">
                 $content
             </div>
+
         </div>
     </body>
 </html>

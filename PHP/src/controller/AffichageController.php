@@ -46,14 +46,23 @@ class AffichageController
     public function afficherAccueil(Request $rq, Response $rs, $args):Response
     {
         $tabListes = array();
+        $tabListesCrees = array();
         foreach ($_COOKIE as $nom => $valeur) {
             if (str_starts_with($nom, 'TokenAcces')) {
-                echo 'dac';
-                $tabListes[] = \mywishlist\models\Liste::where('token', '=', $valeur)->first();
+                $liste = \mywishlist\models\Liste::where('token', '=', $valeur)->first();
+                if ($liste !== null) {
+                    $tabListes[] = $liste;
+                }
+            }
+            if (str_starts_with($nom, 'TokenEdition')) {
+                $listeC = \mywishlist\models\Liste::where('token_edition', '=', $valeur)->first();
+                if ($listeC !== null) {
+                    $tabListesCrees[] = $listeC;
+                }
             }
         }
 
-        $vue = new \mywishlist\vue\VueParticipant($tabListes, $this->container) ;
+        $vue = new \mywishlist\vue\VueParticipant([$tabListes, $tabListesCrees], $this->container) ;
         $html = $vue->render(0) ;
        
         $rs->getBody()->write($html);

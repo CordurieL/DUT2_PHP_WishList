@@ -35,18 +35,34 @@ class VueCreation
     // Inscription
     public function creationFormulaireInscription() : string
     {
-        $content = "<form action='' method='post'>
-            <label for='username'>Nom d'utilisateur</label>
-            <input type='text' name='username' id='username' required>
-	        <label for='password'>Mot de passe</label>
-			<input type='password' name='password' id='password' required>
-            <label for='password_confirm'>Confirmation du mot de passe</label>
-			<input type='password' name='password_confirm' id='password_confirm' required>
-            <input type='submit' value='S'inscrire'>
-            </form> \n";
+        $content = "<form method='POST' action=''>
+	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
+	        <input type='password' name ='pass' placeholder='pass' required/><br>
+	        <input type='password' name ='confirm_pass' placeholder='confirm_pass' required/><br>
+	        <button type='submit'>Inscription</button>
+            </form>";
+        echo "\n";
         return $content;
     }
-
+    
+    public function creationFormulaireAuthentification() : string 
+    {
+        $content = "<form method='POST' action=''>
+	        <input type='text' name ='pseudo' placeholder='pseudo' required/><br>
+	        <input type='password' name ='pass' placeholder='pass' required/><br>
+	        <button type='submit'>authentification</button>
+            </form>";
+        echo "\n";
+        return $content;
+    }
+    public function compteCree():string 
+    {
+        return "Votre compte à bien été créé ";
+    }
+    public function authentifie():string 
+    {
+        return "connecte au compte ".$_SESSION['pseudo'];
+    }
     public function listeCree():string
     {
         $l = $this->tab[0];
@@ -83,6 +99,20 @@ class VueCreation
                 $content = $this->creationFormulaireInscription();
                 break;
             }
+            case 9:
+            {
+                $content = $this->compteCree();
+                break;
+            }
+            case 10:
+            {
+                $content = $this->creationFormulaireAuthentification();
+                break;
+            }
+            case 11: 
+            {
+                $content = $this->authentifie();
+            }
         }
 
         $url_Accueil = $this->container->router->pathFor('Accueil');
@@ -91,7 +121,9 @@ class VueCreation
         $url_item = $this->container->router->pathFor('affUnItem', ['id'=>1, 'token'=>'nosecure3']);
         $url_affichageForm = $this->container->router->pathFor('affForm');
         $url_inscription = $this->container->router->pathFor('inscription');
+        $url_authentification = $this->container->router->pathFor('authentification');
         $root = SCRIPT_ROOT;
+
 
         $html = <<<END
     <!DOCTYPE html>
@@ -113,6 +145,7 @@ class VueCreation
                 <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
                 <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
                 <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_authentification'">Authentification (démo, emplacement temporaire)</button>
             </nav>
             <div class="content">
                 $content

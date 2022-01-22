@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+session_start();
 require 'vendor/autoload.php';
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -59,9 +60,11 @@ $app->get('/newliste', 'mywishlist\controller\CreationController:afficherFormula
 $app->post('/newliste', 'mywishlist\controller\CreationController:traiterFormListe')->setName('traitForm');
 
 //inscription
-$app->get('/inscription', 'mywishlist\controller\CreationController:traiterFormInscription')->setName('inscription');
-$app->post('/inscription', 'mywishlist\controller\CreationController:registerForm')->setName('inscriptionForm');
-
+$app->get('/inscription', 'mywishlist\controller\CreationController:afficherFormulaireInscription')->setName('inscription');
+$app->post('/inscription', 'mywishlist\controller\CreationController:traiterFormInscription')->setName('compteCree');
+//authentification
+$app->get('/authentification', 'mywishlist\controller\CreationController:afficherFormulaireAuthentification')->setName('authentification');
+$app->post('/authentification', 'mywishlist\controller\CreationController:traiterFormAuthentification')->setName('authentifie');
 
 
 $app->get(

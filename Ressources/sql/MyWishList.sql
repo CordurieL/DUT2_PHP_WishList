@@ -79,7 +79,9 @@ CREATE TABLE `compte` (
   `pseudo` text NOT NULL,
   `pass` text NOT NULL,
   PRIMARY KEY(`no_compte`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `participation`;
 CREATE TABLE `participation` (
@@ -94,3 +96,4 @@ CREATE TABLE `participation` (
 INSERT INTO `participation` (`item_id`, `nomParticipation`, `messageParticipation`, `contribution`) VALUES
 (23, 'Pierre', 'Cadeau super coolos bah ouai',1.52),
 (23, 'Paul', 'Pas radin pour un sou',25.00);
+
