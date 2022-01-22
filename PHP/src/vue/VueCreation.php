@@ -21,12 +21,12 @@ class VueCreation
         $content = "<form method='POST' action=''>
             <p>Créer votre liste de souhait : </p>
             <hr>
-            <p>Titre de la liste : </p><br>
-	        <div id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></div><br>
-	        <p>Description de la liste : </p><br>
-	        <div id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></div><br>
+            <p>Titre de la liste : </p>
+	        <span id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></span><br>
+	        <p>Description de la liste : </p>
+	        <span id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></span><br>
 	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
-	        <button  type='submit'>Créer la liste</button>
+	        <button class='inscri' type='submit'>Créer la liste</button>
             </form>";
         echo "\n";
         return $content;
