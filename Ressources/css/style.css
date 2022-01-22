@@ -104,6 +104,13 @@ a:active {
   padding: 1.5em;
 }
 
+#inputInscription {
+  height: auto;
+  width: auto;
+}
+
+
+
 hr {
   border: 2px solid rgb(19, 19, 143);
 }

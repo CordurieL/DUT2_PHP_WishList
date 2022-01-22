@@ -19,8 +19,12 @@ class VueCreation
     {
         $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
         $content = "<form method='POST' action=''>
-	        <input type='text' name ='titre' placeholder='titre' required/><br>
-	        <input type='text' name ='description' placeholder='descri'/><br>
+            <p>Créer votre liste de souhait : </p>
+            <hr>
+            <p>Titre de la liste : </p><br>
+	        <div id='inputInscription'><input size='12' type='text' name ='titre' placeholder='titre' required/></div><br>
+	        <p>Description de la liste : </p><br>
+	        <div id='inputInscription'><input size='20' type='text' name ='description' placeholder='descri'/></div><br>
 	        <div><p>Date d'expiration de la liste : </p><input type='date' name ='expiration' placeholder='expiration' value='$tommorow' min='$tommorow'/></div><br>
 	        <button type='submit'>Créer la liste</button>
             </form>";
