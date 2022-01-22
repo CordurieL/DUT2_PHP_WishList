@@ -128,7 +128,7 @@ class VueParticipant
                 <textarea id='ZoneUrl' rows='1' cols='65'></textarea>";
             } else {
                 $content .= "<form method='POST' action=''>
-                <button name='publicationButton' type='submit'>Rendre la liste publique</button>
+                <button class='bout' name='publicationButton' type='submit'>Rendre la liste publique</button>
                 </form>";
             }
             $tommorow = (new \DateTime('tomorrow'))->format('Y-m-d');
@@ -227,7 +227,7 @@ class VueParticipant
         $content .= "</ul><hr>";
         $content .= "<form method='POST' action=''>
 	        <textarea name ='contenu' placeholder='Message' maxlength=255 cols=50 rows=8></textarea><br>
-	        <button type='submit'>Publier le message</button>
+	        <button class='bout' type='submit'>Publier le message</button>
             </form><br>";
         $message = $this->tab[2];
         foreach ($message as $m) {
@@ -253,9 +253,9 @@ class VueParticipant
 
         $cette_liste = $this->container->router->pathFor('affUneListe', ['token'=>$l['token']]);
         
-        $content = "<button id='boutonRetourListe' onclick=\"window.location.href='$cette_liste'\">← Retour à la liste</button><br>";
+        $content = "<button id='boutonRetourListe' class='bout' onclick=\"window.location.href='$cette_liste'\">← Retour à la liste</button><br>";
         if (isset($_COOKIE["TokenEdition:".$tokenEdition])) {
-            $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] .<br>";
+            $content .= "CET ITEM FAIT PARTIE DE VOTRE LISTE DE SOUHAIT N°$l[no] DE TOKEN $l[token] <br>";
         } else {
             setcookie(
                 "TokenAcces:".$l['token'],
@@ -271,8 +271,8 @@ class VueParticipant
                    .style.display = 'none';
                }
         </script>
-        <div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br>
-        <img id=HideImg style='max-width: 200px' src='../../../../Ressources/img/$i[img]' onerror='hideImg()'></div><br>";
+        <div>Nom de l'item : $i[nom] <br> Description : $i[descr] <br> Prix : $i[tarif] € <br> Détail du produit : <a href= '$i[url]'>$i[url]</a> <br></div>
+        <div>Image:<br><img id=HideImg style='max-width: 200px' src='../../../../Ressources/img/$i[img]' onerror='hideImg()'></div><br>";
 
         //Transformer en cagnotte
         if ((isset($_COOKIE["TokenEdition:".$tokenEdition])) && ($i['nomReservation'] == null)) {
@@ -426,7 +426,7 @@ class VueParticipant
                 "/"
             );
         }
-        $content .= "<a href=$url_Accueil>Retour à l'accueil</a></div>";
+        $content .= "<div><a href=$url_Accueil>Retour à l'accueil</a></div>";
         return "<section>$content</section>";
     }
 
