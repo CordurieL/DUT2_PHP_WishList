@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace mywishlist\controller;
 
+use \Slim\Container;
 use mywishlist\models\Item;
-use mywishlist\models\Liste as Liste;
+use mywishlist\models\Liste;
 use mywishlist\models\Compte;
 use mywishlist\vue\VueCreation as VueCreation;
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,9 +13,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 class CreationController
 {
-    private \Slim\Container $container;
+    private Container $container;
 
-    public function __construct(\Slim\Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
