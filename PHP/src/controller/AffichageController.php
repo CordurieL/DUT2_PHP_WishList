@@ -229,7 +229,7 @@ class AffichageController
 
             //ajout de l'image a l'item
             if ((isset($_COOKIE["TokenEdition:".$tokenEdition]))) {
-                if (($_FILES['image']['size'] != 0)) {
+                if ((isset($_FILES['image']['size']))&&($_FILES['image']['size'] != 0)) {
                     $types = [".jpg", ".png", ".gif", ".JPG", ".PNG", ".GIF"];
                     if (in_array(substr($_FILES['image']['name'], -4), $types)) {
                         $extension = substr($_FILES['image']['name'], -3);
