@@ -175,10 +175,8 @@ class VueCreation
                 <button class='navigation' onclick="window.location.href='$url_Accueil'">Accueil</button>
                 <button class='navigation' onclick="window.location.href='$url_affichageForm'">Créer une nouvelle liste</button>
                 <button class='navigation' onclick="window.location.href='$url_listes'">Listes publiques</button>
-                <button class='navigation' onclick="window.location.href='$url_liste'">Lien vers la liste 1 (temporaire)</button>
-                <button class='navigation' onclick="window.location.href='$url_item'">Lien vers l'item 1 (temporaire)</button>
-                <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription (démo, emplacement temporaire)</button>
-                <button class='navigation' onclick="window.location.href='$url_authentification'">Authentification (démo, emplacement temporaire)</button>
+                <button class='navigation' onclick="window.location.href='$url_inscription'">Inscription</button>
+                <button class='navigation' onclick="window.location.href='$url_authentification'">Authentification</button>
             </nav>
             <div class="content">
                 $content
