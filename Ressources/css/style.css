@@ -18,7 +18,7 @@ html {
 body {
   padding-top: 0;
   margin-top: 0;
-
+  overflow-x: hidden;
 }
 
 
@@ -52,8 +52,8 @@ a:hover:before {
 
 #mainDiv {
   display: grid;
-  grid-template-columns: 23em auto;
-  grid-template-rows: 5% 95%;
+  grid-template-columns: 19em auto;
+  grid-template-rows: 7em 89%;
 }
 
 .leftScreen,
@@ -76,13 +76,14 @@ a:hover:before {
   border-top: solid 0.7em var(--fond);
   text-align: center;
   font-family: "Lobster";
+
 }
 
 .leftScreen {
   position: fixed;
   background-color: #25283b;
-  height: 30em;
-  width: 20em;
+  height: 20em;
+  width: 15em;
   text-align: center;
   margin-top: 6.9em;
   display: flex;
