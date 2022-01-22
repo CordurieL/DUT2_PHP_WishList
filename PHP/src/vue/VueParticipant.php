@@ -298,10 +298,10 @@ class VueParticipant
                     $content .= "Aucune participation pour le moment. <br>";
                 } else {
                     foreach ($arrayParticipants as $p) {
-                        $content .= "$p[nomparticipation] : $p[contribution]€<br>";
-                        if ("$p[messageparticipation]" != null) {
+                        $content .= "$p[nomParticipation] : $p[contribution]€<br>";
+                        if ("$p[messageParticipation]" != null) {
                             //Message au créateur si il y a un message et un nom de reservation
-                            $content .= "Message : $p[messageparticipation]<br><br>";
+                            $content .= "Message : $p[messageParticipation]<br><br>";
                         } else {
                             $content .= "Pas de message fournis lors de la participation.<br><br>";
                         }
