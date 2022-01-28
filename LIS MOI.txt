@@ -18,3 +18,7 @@ Compléter le nom de la base le nom d'utilisateur et le mot de passe.
 Dans PHPWishList/PHP/ , ouvrir le terminal et faire 'composer install'. Un dossier vendor devrait notamment se créer aux côtés de src.
 
 Dans VueCreation.php et VueParticipant.php, changer la chemin qui suit "define('SCRIPT_ROOT'," par le chemin que vous obtenez en vous rendant à l'accueil du projet MyWishList (pour le css).
+
+https://webetu.iutnc.univ-lorraine.fr/www/cordurie1u/PHPWishList/PHP/
+
+Cordurié, Chevaleyre, Sacquard, Hemmerle
